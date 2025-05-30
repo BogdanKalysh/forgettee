@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  base sizes  -->
+    <dimen name="size_16_dp">16dp</dimen>
+    <dimen name="size_24_dp">24dp</dimen>
+    <dimen name="size_32_dp">32dp</dimen>
+    <dimen name="size_40_dp">40dp</dimen>
+    <dimen name="size_48_dp">48dp</dimen>
+    <dimen name="size_56_dp">56dp</dimen>
+    <dimen name="size_64_dp">64dp</dimen>
+
+
+    <!--  corners  -->
+    <dimen name="item_corner_radius">16dp</dimen>
+
+    <!--  text sizes  -->
+    <dimen name="toolbar_header_size">20sp</dimen>
+    <dimen name="todo_item_text_size">16sp</dimen>
+</resources>
