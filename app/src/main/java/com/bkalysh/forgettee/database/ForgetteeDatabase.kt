@@ -1,6 +1,7 @@
 package com.bkalysh.forgettee.database
 
 import androidx.room.Database
+import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bkalysh.forgettee.database.dao.ToDoItemDao
 import com.bkalysh.forgettee.database.models.ToDoItem
@@ -13,6 +14,6 @@ import com.bkalysh.forgettee.database.models.ToDoItem
     exportSchema = false
 )
 @TypeConverters(Converters::class)
-abstract class ForgetteeDatabase {
+abstract class ForgetteeDatabase: RoomDatabase() {
     abstract val toDoItemDao: ToDoItemDao
 }

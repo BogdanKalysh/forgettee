@@ -8,7 +8,7 @@ import java.util.Date
 
 @Entity(
     tableName = "to_do_items",
-    indices = [Index(value = ["owner_id"]), Index(value = ["device_model_id"])]
+    indices = [Index(value = ["is_removed"])]
 )
 data class ToDoItem (
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

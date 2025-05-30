@@ -49,7 +49,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Room
-    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room)
     ksp(libs.androidx.room.compiler)
 
     // Koin
