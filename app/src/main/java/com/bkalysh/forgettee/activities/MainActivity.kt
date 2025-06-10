@@ -1,5 +1,6 @@
 package com.bkalysh.forgettee.activities
 
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,6 +22,7 @@ import com.bkalysh.forgettee.databinding.ActivityMainBinding
 import com.bkalysh.forgettee.utils.Utils.focusOnEditText
 import com.bkalysh.forgettee.utils.Utils.hideKeyboard
 import com.bkalysh.forgettee.utils.Utils.parseTodoItemsFromInput
+import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             object: TodoItemsRecyclerViewAdapter.OnTodoToggleListener {
                 override fun onTodoClicked(toDoItem: ToDoItem) {
                     val updatedItem = toDoItem.copy(isDone = !toDoItem.isDone)
-
+                    vibrate(this@MainActivity)
                     viewModel.updateTodoItem(updatedItem)
                 }
             },
@@ -112,6 +114,36 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     makeMovementFlags(0, 0)
                 }
+            }
+
+            private var seekForward = true
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                val itemWidth = viewHolder.itemView.width
+                val swipeThreshold = itemWidth * 0.5f
+                val xCord = kotlin.math.abs(dX)
+
+                if (isCurrentlyActive) {
+                    if (seekForward && xCord > swipeThreshold) {
+                        seekForward = false
+                        vibrate(viewHolder.itemView.context)
+                    } else if (!seekForward && xCord < swipeThreshold) {
+                        seekForward = true
+                        vibrate(viewHolder.itemView.context)
+                    }
+                } else {
+                    seekForward = true
+                }
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
         })
 
