@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.adapters.TodoItemsRecyclerViewAdapter
 import com.bkalysh.forgettee.database.models.ToDoItem
@@ -61,14 +62,16 @@ class MainActivity : AppCompatActivity() {
         toDoItemsAdapter = TodoItemsRecyclerViewAdapter(this,
             object: TodoItemsRecyclerViewAdapter.OnTodoToggleListener {
                 override fun onTodoClicked(toDoItem: ToDoItem) {
-                    // TODO hande todo item click
-                    Toast.makeText(this@MainActivity, "TOGGLED: ${toDoItem.text}", Toast.LENGTH_SHORT).show()
+                    val updatedItem = toDoItem.copy(isDone = !toDoItem.isDone)
+                    viewModel.updateTodoItem(updatedItem)
                 }
             })
 
         binding.rvTodoList.apply {
             adapter = toDoItemsAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
+            // disabling change animation for quick isDone state updates
+            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         }
     }
 

@@ -1,11 +1,13 @@
 package com.bkalysh.forgettee.adapters
 
 import android.content.Context
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ItemTodoBinding
 
@@ -32,9 +34,15 @@ class TodoItemsRecyclerViewAdapter(private val context: Context, private val tog
             val toDoItem = todoItems[position]
             tvTodoText.text = toDoItem.text
 
-            //TODO implement item done state displaying
+            if (toDoItem.isDone) {
+                tvTodoText.paintFlags = tvTodoText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                root.setBackgroundResource(R.drawable.todo_item_done_background)
+            } else {
+                tvTodoText.paintFlags = tvTodoText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                root.setBackgroundResource(R.drawable.todo_item_background)
+            }
+
             root.setOnClickListener {
-                // TODO implement done state change
                 toggleListener.onTodoClicked(toDoItem)
             }
         }
@@ -53,7 +61,7 @@ class TodoItemsRecyclerViewAdapter(private val context: Context, private val tog
         }
 
         override fun areContentsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean {
-            return oldItem.text == newItem.text
+            return oldItem == newItem
         }
     }
     private val differ = AsyncListDiffer(this, diffCallback)
