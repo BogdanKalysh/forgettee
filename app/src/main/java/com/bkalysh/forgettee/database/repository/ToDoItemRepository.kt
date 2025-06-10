@@ -17,6 +17,10 @@ class ToDoItemRepository(private val dao: ToDoItemDao) {
         dao.delete(item)
     }
 
+    suspend fun removeAllActive() {
+        dao.removeAllActive()
+    }
+
     fun getAll(): Flow<List<ToDoItem>> {
         return dao.getAll()
     }

@@ -27,6 +27,12 @@ class MainViewModel(private val repository: ToDoItemRepository): ViewModel() {
         }
     }
 
+    fun removeAllActiveTodoItems() {
+        viewModelScope.launch {
+            repository.removeAllActive()
+        }
+    }
+
     fun updateTodoItem(item: ToDoItem) {
         // Instantly updating the list
         val updatedList = _activeTasks.value.map {

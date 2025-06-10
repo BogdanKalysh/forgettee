@@ -7,6 +7,7 @@
 
     <!--  buttons text  -->
     <string name="add_button">Add</string>
+    <string name="delete_all">Delete all</string>
 
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">What will you do?</string>

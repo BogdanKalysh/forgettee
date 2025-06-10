@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         setupTodoRecyclerViewAdapter()
         setupAddTodoPopupButton()
+        setupMenu()
         setupDimmer()
         setupAddTodoItemButton()
     }
@@ -122,7 +123,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDimmer() {
-        binding.dimmer.setOnClickListener { dismissAddPopup() }
+        binding.dimmer.setOnClickListener { closeAllPopups() }
+    }
+
+    private fun setupMenu() {
+        binding.btnMenu.setOnClickListener {
+            openMenu()
+        }
+        setupDeleteAllButton()
     }
 
     private fun setupAddTodoItemButton() {
@@ -132,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
             if (todoItems.isNotEmpty()) {
                 todoItems.forEach(viewModel::insertTodoItem)
-                dismissAddPopup()
+                closeAllPopups()
             } else {
                 Toast.makeText(this,
                     getString(R.string.enter_todo_task_description),
@@ -141,16 +149,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupDeleteAllButton() {
+        binding.btnDeleteAll.setOnClickListener {
+            viewModel.removeAllActiveTodoItems()
+            closeAllPopups()
+        }
+    }
+
+    private fun openMenu() {
+        binding.dimmer.visibility = View.VISIBLE
+        binding.clMenu.visibility = View.VISIBLE
+    }
+
     private fun openAddPopup() {
         binding.dimmer.visibility = View.VISIBLE
         focusOnEditText(binding.etTodoText)
         binding.popupAddTodo.visibility = View.VISIBLE
     }
 
-    private fun dismissAddPopup() {
+    private fun closeAllPopups() {
         binding.dimmer.visibility = View.INVISIBLE
         binding.etTodoText.text.clear()
         binding.popupAddTodo.visibility = View.INVISIBLE
+        binding.clMenu.visibility = View.INVISIBLE
         hideKeyboard(binding.etTodoText)
     }
 }
