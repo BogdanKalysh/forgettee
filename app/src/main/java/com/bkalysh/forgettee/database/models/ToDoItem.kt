@@ -13,8 +13,8 @@ import java.util.Date
 data class ToDoItem (
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "text") val text: String,
-    @ColumnInfo(name = "is_done") val isDone: Boolean,
-    @ColumnInfo(name = "is_removed") val isRemoved: Boolean,
     @ColumnInfo(name = "created_at") val createdAt: Date,
-    @ColumnInfo(name = "finished_at") val finishedAt: Date,
+    @ColumnInfo(name = "is_done") val isDone: Boolean,
+    @ColumnInfo(name = "done_at") val doneAt: Date,
+    @ColumnInfo(name = "is_removed") val isRemoved: Boolean,
 )

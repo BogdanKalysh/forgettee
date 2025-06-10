@@ -29,10 +29,10 @@ object Utils {
                 if (trimmed.isNotEmpty()) {
                     ToDoItem(
                         text = trimmed,
-                        isDone = false,
-                        isRemoved = false,
                         createdAt = now,
-                        finishedAt = now
+                        isDone = false,
+                        doneAt = now,
+                        isRemoved = false
                     )
                 } else null
             }

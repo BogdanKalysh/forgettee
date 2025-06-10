@@ -11,7 +11,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.adapters.TodoItemsRecyclerViewAdapter
 import com.bkalysh.forgettee.database.models.ToDoItem
@@ -22,6 +24,7 @@ import com.bkalysh.forgettee.utils.Utils.parseTodoItemsFromInput
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
@@ -59,10 +62,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupTodoRecyclerViewAdapter() {
-        toDoItemsAdapter = TodoItemsRecyclerViewAdapter(this,
+        toDoItemsAdapter = TodoItemsRecyclerViewAdapter(
             object: TodoItemsRecyclerViewAdapter.OnTodoToggleListener {
                 override fun onTodoClicked(toDoItem: ToDoItem) {
                     val updatedItem = toDoItem.copy(isDone = !toDoItem.isDone)
+
+                    viewModel.updateTodoItem(updatedItem)
+                }
+            },
+            object : TodoItemsRecyclerViewAdapter.OnItemSwipedListener {
+                override fun onItemSwiped(toDoItem: ToDoItem) {
+                    val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
                     viewModel.updateTodoItem(updatedItem)
                 }
             })
@@ -73,6 +83,38 @@ class MainActivity : AppCompatActivity() {
             // disabling change animation for quick isDone state updates
             (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         }
+
+        setupItemSwipeHelper()
+    }
+
+    private fun setupItemSwipeHelper() {
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val item = toDoItemsAdapter.todoItems[position]
+                toDoItemsAdapter.todoItems = toDoItemsAdapter.todoItems.toMutableList().apply { removeAt(position) }
+                toDoItemsAdapter.onItemSwiped(item)
+            }
+
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                val position = viewHolder.adapterPosition
+                val item = toDoItemsAdapter.todoItems[position]
+
+                return if (item.isDone) {
+                    val swipeFlags = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                    makeMovementFlags(0, swipeFlags)
+                } else {
+                    makeMovementFlags(0, 0)
+                }
+            }
+        })
+
+        itemTouchHelper.attachToRecyclerView(binding.rvTodoList)
     }
 
     private fun setupAddTodoPopupButton() {

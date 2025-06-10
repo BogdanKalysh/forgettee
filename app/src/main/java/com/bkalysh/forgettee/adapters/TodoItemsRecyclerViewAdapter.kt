@@ -1,6 +1,5 @@
 package com.bkalysh.forgettee.adapters
 
-import android.content.Context
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +10,10 @@ import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ItemTodoBinding
 
-class TodoItemsRecyclerViewAdapter(private val context: Context, private val toggleListener: OnTodoToggleListener) : RecyclerView.Adapter<TodoItemsRecyclerViewAdapter.TodoViewHolder>() {
+class TodoItemsRecyclerViewAdapter(
+    private val toggleListener: OnTodoToggleListener,
+    private val swipeListener: OnItemSwipedListener
+) : RecyclerView.Adapter<TodoItemsRecyclerViewAdapter.TodoViewHolder>() {
     var todoItems: List<ToDoItem>
         get() = differ.currentList
         set(value) {
@@ -48,11 +50,18 @@ class TodoItemsRecyclerViewAdapter(private val context: Context, private val tog
         }
     }
 
+    fun onItemSwiped(toDoItem: ToDoItem) {
+        swipeListener.onItemSwiped(toDoItem)
+    }
 
     inner class TodoViewHolder(val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root)
 
     interface OnTodoToggleListener {
         fun onTodoClicked(toDoItem: ToDoItem)
+    }
+
+    interface OnItemSwipedListener {
+        fun onItemSwiped(toDoItem: ToDoItem)
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<ToDoItem>() {
