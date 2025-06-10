@@ -17,4 +17,5 @@ data class ToDoItem (
     @ColumnInfo(name = "is_done") val isDone: Boolean,
     @ColumnInfo(name = "done_at") val doneAt: Date,
     @ColumnInfo(name = "is_removed") val isRemoved: Boolean,
+    @ColumnInfo(name = "position") val position: Int,
 )

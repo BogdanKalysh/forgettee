@@ -78,6 +78,11 @@ class MainActivity : AppCompatActivity() {
                     val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
                     viewModel.updateTodoItem(updatedItem)
                 }
+            },
+            object : TodoItemsRecyclerViewAdapter.OnReorderListener {
+                override fun onReorder(reorderedItems: List<ToDoItem>) {
+                    viewModel.updateAllTodoItems(reorderedItems)
+                }
             })
 
         binding.rvTodoList.apply {
@@ -91,8 +96,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupItemSwipeHelper() {
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                source: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return toDoItemsAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
+            }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
@@ -108,16 +119,19 @@ class MainActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 val item = toDoItemsAdapter.todoItems[position]
 
+                val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+
                 return if (item.isDone) {
-                    val swipeFlags = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-                    makeMovementFlags(0, swipeFlags)
+                    makeMovementFlags(dragFlags, swipeFlags)
                 } else {
-                    makeMovementFlags(0, 0)
+                    makeMovementFlags(dragFlags, 0)
                 }
             }
 
-            private var seekForward = true
+            override fun isLongPressDragEnabled(): Boolean = true
 
+            private var seekForward = true
             override fun onChildDraw(
                 c: Canvas,
                 recyclerView: RecyclerView,
@@ -168,7 +182,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupAddTodoItemButton() {
         binding.btnAddTodo.setOnClickListener {
             val todoText = binding.etTodoText.text.toString()
-            val todoItems = parseTodoItemsFromInput(todoText)
+            val listSize = toDoItemsAdapter.todoItems.size
+            val todoItems = parseTodoItemsFromInput(todoText, listSize)
 
             if (todoItems.isNotEmpty()) {
                 todoItems.forEach(viewModel::insertTodoItem)

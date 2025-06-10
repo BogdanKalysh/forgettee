@@ -13,7 +13,11 @@ class ToDoItemRepository(private val dao: ToDoItemDao) {
         dao.update(item)
     }
 
-    suspend fun delete(item: ToDoItem) {
+    suspend fun updateAll(items: List<ToDoItem>) {
+        dao.updateAll(items)
+    }
+
+    suspend fun delete(item: ToDoItem) { // todo will be used on task archive activity
         dao.delete(item)
     }
 
@@ -21,7 +25,7 @@ class ToDoItemRepository(private val dao: ToDoItemDao) {
         dao.removeAllActive()
     }
 
-    fun getAll(): Flow<List<ToDoItem>> {
+    fun getAll(): Flow<List<ToDoItem>> { // todo will be used on task archive activity
         return dao.getAll()
     }
 

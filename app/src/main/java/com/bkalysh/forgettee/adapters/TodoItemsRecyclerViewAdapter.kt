@@ -10,10 +10,13 @@ import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ItemTodoBinding
 
+
 class TodoItemsRecyclerViewAdapter(
     private val toggleListener: OnTodoToggleListener,
-    private val swipeListener: OnItemSwipedListener
-) : RecyclerView.Adapter<TodoItemsRecyclerViewAdapter.TodoViewHolder>() {
+    private val swipeListener: OnItemSwipedListener,
+    private val reorderListener: OnReorderListener,
+) : RecyclerView.Adapter<TodoItemsRecyclerViewAdapter.TodoViewHolder>(),
+    ItemTouchHelperListener {
     var todoItems: List<ToDoItem>
         get() = differ.currentList
         set(value) {
@@ -64,6 +67,10 @@ class TodoItemsRecyclerViewAdapter(
         fun onItemSwiped(toDoItem: ToDoItem)
     }
 
+    interface OnReorderListener {
+        fun onReorder(reorderedItems: List<ToDoItem>)
+    }
+
     private val diffCallback = object : DiffUtil.ItemCallback<ToDoItem>() {
         override fun areItemsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean {
             return oldItem.id == newItem.id
@@ -74,4 +81,23 @@ class TodoItemsRecyclerViewAdapter(
         }
     }
     private val differ = AsyncListDiffer(this, diffCallback)
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        val mutableList = todoItems.toMutableList()
+        val movedItem = mutableList.removeAt(fromPosition)
+        mutableList.add(toPosition, movedItem)
+
+        mutableList.forEachIndexed { index, item ->
+            mutableList[index] = item.copy(position = index)
+        }
+
+        todoItems = mutableList
+        reorderListener.onReorder(mutableList)
+
+        return true
+    }
+}
+
+interface ItemTouchHelperListener {
+    fun onItemMove(fromPosition: Int, toPosition: Int): Boolean
 }

@@ -16,10 +16,13 @@ interface ToDoItemDao {
     @Update
     suspend fun update(item: ToDoItem)
 
+    @Update
+    suspend fun updateAll(items: List<ToDoItem>)
+
     @Query("SELECT * FROM todo_items")
     fun getAll(): Flow<List<ToDoItem>>
 
-    @Query("SELECT * FROM todo_items WHERE is_removed = 0")
+    @Query("SELECT * FROM todo_items WHERE is_removed = 0 ORDER BY position")
     fun getAllActive(): Flow<List<ToDoItem>>
 
     @Query("UPDATE todo_items SET is_removed = 1 WHERE is_removed = 0")
