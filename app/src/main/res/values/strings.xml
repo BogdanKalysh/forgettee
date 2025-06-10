@@ -3,4 +3,14 @@
 
     <!--  context descriptions  -->
     <string name="menu">Menu</string>
+    <string name="add_todo_item">Add todo item</string>
+
+    <!--  buttons text  -->
+    <string name="add_button">Add</string>
+
+    <!--  Placeholders for textview  -->
+    <string name="what_will_you_do">What will you do?</string>
+
+    <!--  Toast messages  -->
+    <string name="enter_todo_task_description">Enter todo task description</string>
 </resources>

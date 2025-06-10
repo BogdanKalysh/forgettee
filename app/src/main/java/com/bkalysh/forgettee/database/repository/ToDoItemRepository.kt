@@ -5,16 +5,12 @@ import com.bkalysh.forgettee.database.models.ToDoItem
 import kotlinx.coroutines.flow.Flow
 
 class ToDoItemRepository(private val dao: ToDoItemDao) {
-    suspend fun upsert(item: ToDoItem) {
-        dao.upsert(item)
+    suspend fun insert(item: ToDoItem) {
+        dao.insert(item)
     }
 
-    suspend fun updateDoneState(id: Long, isDone: Boolean) {
-        dao.updateDoneState(id, isDone)
-    }
-
-    suspend fun updateRemoveState(id: Long, isRemoved: Boolean) {
-        dao.updateRemoveState(id, isRemoved)
+    suspend fun update(item: ToDoItem) {
+        dao.update(item)
     }
 
     suspend fun delete(item: ToDoItem) {
