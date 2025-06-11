@@ -1,8 +1,15 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.Forgettee" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:colorAccent">@color/theme_red</item>
+
+        <item name="colorPrimary">@color/gray_94</item>
+        <item name="colorSecondary">@color/gray_98</item>
+
+        <item name="colorOnPrimary">@color/dark_27</item>
+        <item name="colorOnSecondary">@color/dark_27</item>
+
+        <item name="colorSecondaryVariant">@color/gray_87</item>
+        <item name="colorOnSecondaryFixedVariant">@color/gray_50</item>
     </style>
 
     <style name="Theme.Forgettee" parent="Base.Theme.Forgettee" />

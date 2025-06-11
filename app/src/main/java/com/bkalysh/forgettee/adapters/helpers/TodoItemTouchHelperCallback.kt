@@ -3,12 +3,12 @@ package com.bkalysh.forgettee.adapters.helpers
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.withClip
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +24,7 @@ class TodoItemTouchHelperCallback(
     private val context: Context) : ItemTouchHelper.Callback() {
 
     private val paint = Paint().apply {
-        color = Color.RED
+        color = ContextCompat.getColor(context, R.color.theme_red_desaturated)
         isAntiAlias = true
     }
 

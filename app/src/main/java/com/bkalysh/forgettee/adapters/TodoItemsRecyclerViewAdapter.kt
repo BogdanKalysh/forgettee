@@ -47,6 +47,7 @@ class TodoItemsRecyclerViewAdapter(
                 root.setBackgroundResource(R.drawable.todo_item_background)
             }
 
+
             root.setOnClickListener {
                 toggleListener.onTodoClicked(toDoItem)
             }
