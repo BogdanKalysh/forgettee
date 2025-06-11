@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_64_dp"
     android:paddingHorizontal="@dimen/size_24_dp"
+    android:layout_margin="@dimen/size_16_dp"
     android:background="@drawable/todo_item_background">
 
     <TextView
