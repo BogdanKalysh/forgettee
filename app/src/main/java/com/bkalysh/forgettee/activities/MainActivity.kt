@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() {
             openMenu()
         }
         setupDeleteAllButton()
+        setupArchiveButton()
     }
 
     private fun setupAddTodoItemButton() {
@@ -134,6 +135,13 @@ class MainActivity : AppCompatActivity() {
     private fun setupDeleteAllButton() {
         binding.btnDeleteAll.setOnClickListener {
             viewModel.removeAllActiveTodoItems()
+            closeAllPopups()
+        }
+    }
+
+    private fun setupArchiveButton() {
+        binding.btnArchive.setOnClickListener {
+            Toast.makeText(this, "TBD", Toast.LENGTH_SHORT).show()
             closeAllPopups()
         }
     }
