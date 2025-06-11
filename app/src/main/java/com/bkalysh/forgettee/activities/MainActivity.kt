@@ -1,12 +1,18 @@
 package com.bkalysh.forgettee.activities
 
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import android.animation.ValueAnimator
+import androidx.core.graphics.withClip
 import androidx.core.view.ViewCompat
+import android.view.animation.AccelerateInterpolator
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,7 +32,11 @@ import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.animation.doOnEnd
 import java.util.Date
+import kotlin.math.abs
+import kotlin.math.hypot
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
@@ -95,7 +105,31 @@ class MainActivity : AppCompatActivity() {
         setupItemSwipeHelper()
     }
 
+
+
+    // TODO move out of Main activity
+
+
+    data class CircleState(
+        var radius: Float = 0f,
+        var animating: Boolean = false,
+        var expanded: Boolean = false,
+        var removed: Boolean = false
+    ) {
+        fun reset() {
+            radius = 0f
+            removed = false
+            expanded = false
+            animating = false
+        }
+    }
+
     private fun setupItemSwipeHelper() {
+        val paint = Paint().apply {
+            color = Color.RED
+            isAntiAlias = true
+        }
+
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -110,6 +144,9 @@ class MainActivity : AppCompatActivity() {
                 val item = toDoItemsAdapter.todoItems[position]
                 toDoItemsAdapter.todoItems = toDoItemsAdapter.todoItems.toMutableList().apply { removeAt(position) }
                 toDoItemsAdapter.onItemSwiped(item)
+                circleState.apply {
+                    removed = true
+                }
             }
 
             override fun getMovementFlags(
@@ -131,6 +168,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun isLongPressDragEnabled(): Boolean = true
 
+            private val circleState = CircleState()
+
             private var seekForward = true
             override fun onChildDraw(
                 c: Canvas,
@@ -141,20 +180,87 @@ class MainActivity : AppCompatActivity() {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                val itemWidth = viewHolder.itemView.width
-                val swipeThreshold = itemWidth * 0.5f
-                val xCord = kotlin.math.abs(dX)
+                // implementing vibration on swipe
+                val itemView = viewHolder.itemView
+                val swipeThreshold = 0.5f
+                val swipeProgress = abs(dX) / itemView.width
 
                 if (isCurrentlyActive) {
-                    if (seekForward && xCord > swipeThreshold) {
+                    if (seekForward && swipeProgress > swipeThreshold) {
                         seekForward = false
                         vibrate(viewHolder.itemView.context)
-                    } else if (!seekForward && xCord < swipeThreshold) {
+                    } else if (!seekForward && swipeProgress < swipeThreshold) {
                         seekForward = true
                         vibrate(viewHolder.itemView.context)
                     }
                 } else {
                     seekForward = true
+                }
+
+                //Drawing back wave
+                val width = itemView.width.toFloat()
+                val height = itemView.height.toFloat()
+                val centerX = if (dX > 0) itemView.left.toFloat() else itemView.right.toFloat()
+                val centerY = itemView.top + height / 2f
+                val maxRadius = hypot(width, height)
+
+                val radiusState = circleState
+
+                val itemCornerRadius = resources.getDimensionPixelSize(R.dimen.item_corner_radius)
+                val clipPath = Path().apply {
+                    addRoundRect(
+                        itemView.left.toFloat(),
+                        itemView.top.toFloat(),
+                        itemView.right.toFloat(),
+                        itemView.bottom.toFloat(),
+                        itemCornerRadius.toFloat(),
+                        itemCornerRadius.toFloat(),
+                        Path.Direction.CW
+                    )
+                }
+
+                // handling clearing swipe wave after removing
+                if (swipeProgress <= 0.5f && radiusState.removed) {
+                    radiusState.reset()
+                }
+
+                if (swipeProgress > 0.5f && !radiusState.expanded && !radiusState.animating) {
+                    radiusState.removed = false
+                    radiusState.animating = true
+                    ValueAnimator.ofFloat(radiusState.radius, maxRadius).apply {
+                        duration = 300
+                        interpolator = AccelerateDecelerateInterpolator()
+                        addUpdateListener {
+                            radiusState.radius = it.animatedValue as Float
+                            recyclerView.invalidate()
+                        }
+                        doOnEnd {
+                            radiusState.animating = false
+                            radiusState.expanded = true
+                        }
+                        start()
+                    }
+                } else if (swipeProgress <= 0.5f && radiusState.expanded && !radiusState.animating) {
+                    radiusState.animating = true
+                    ValueAnimator.ofFloat(radiusState.radius, 0f).apply {
+                        duration = 200
+                        interpolator = AccelerateInterpolator()
+                        addUpdateListener {
+                            radiusState.radius = it.animatedValue as Float
+                            recyclerView.invalidate()
+                        }
+                        doOnEnd {
+                            radiusState.animating = false
+                            radiusState.expanded = false
+                        }
+                        start()
+                    }
+                }
+
+                if (radiusState.radius > 0f) {
+                    c.withClip(clipPath) {
+                        c.drawCircle(centerX, centerY, radiusState.radius, paint)
+                    }
                 }
 
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
@@ -163,6 +269,8 @@ class MainActivity : AppCompatActivity() {
 
         itemTouchHelper.attachToRecyclerView(binding.rvTodoList)
     }
+
+    // TODO move out of Main activity
 
     private fun setupAddTodoPopupButton() {
         binding.btnAdd.setOnClickListener { openAddPopup() }
