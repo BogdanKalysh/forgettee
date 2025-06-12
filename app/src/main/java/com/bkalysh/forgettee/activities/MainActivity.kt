@@ -2,6 +2,7 @@ package com.bkalysh.forgettee.activities
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -125,6 +126,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupAddTodoItemButton() {
         todoPopupBinding.btnAddTodo.setOnClickListener {
+            vibrate(this@MainActivity)
             val todoText = todoPopupBinding.etTodoText.text.toString()
             val listSize = toDoItemsAdapter.todoItems.size
             val todoItems = parseTodoItemsFromInput(todoText, listSize)
@@ -156,11 +158,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun openMenu() {
         binding.dimmer.visibility = View.VISIBLE
+        val animation = AnimationUtils.loadAnimation(this, R.anim.scale_down)
+        binding.clMenu.startAnimation(animation)
         binding.clMenu.visibility = View.VISIBLE
     }
 
     private fun closeAllPopups() {
         binding.dimmer.visibility = View.INVISIBLE
+        val animation = AnimationUtils.loadAnimation(this, R.anim.scale_up)
+        binding.clMenu.startAnimation(animation)
         binding.clMenu.visibility = View.INVISIBLE
     }
 }

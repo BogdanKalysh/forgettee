@@ -28,13 +28,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:id="@+id/btn_add_todo"
         android:layout_width="0dp"
         android:layout_height="@dimen/size_48_dp"
         android:layout_marginHorizontal="@dimen/size_24_dp"
         android:layout_marginBottom="@dimen/size_24_dp"
         android:layout_marginTop="@dimen/size_16_dp"
+        android:gravity="center"
         android:background="@drawable/button_primary_background"
         android:text="@string/add_button"
         android:textColor="?attr/colorOnPrimary"

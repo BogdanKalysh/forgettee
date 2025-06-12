@@ -14,11 +14,13 @@
 
     <!--  corners  -->
     <dimen name="item_corner_radius">16dp</dimen>
-    <dimen name="button_border_width">1dp</dimen>
+    <dimen name="button_border_width">2dp</dimen>
+    <dimen name="menu_border_width">1dp</dimen>
 
     <!--  text sizes  -->
     <dimen name="toolbar_header_size">20sp</dimen>
     <dimen name="todo_item_text_size">16sp</dimen>
     <dimen name="add_button_text_size">16sp</dimen>
+    <dimen name="menu_button_text_size">16sp</dimen>
     <dimen name="edit_todo_text_size">16sp</dimen>
 </resources>

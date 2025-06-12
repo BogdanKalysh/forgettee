@@ -12,5 +12,7 @@
         <item name="colorOnSecondaryFixedVariant">@color/gray_50</item>
     </style>
 
-    <style name="Theme.Forgettee" parent="Base.Theme.Forgettee" />
+    <style name="Theme.Forgettee" parent="Base.Theme.Forgettee">
+
+    </style>
 </resources>
