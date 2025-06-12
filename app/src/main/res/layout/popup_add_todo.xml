@@ -36,7 +36,7 @@
         android:layout_marginBottom="@dimen/size_24_dp"
         android:layout_marginTop="@dimen/size_16_dp"
         android:gravity="center"
-        android:background="@drawable/button_primary_background"
+        android:background="@drawable/button_primary_ripple"
         android:text="@string/add_button"
         android:textColor="?attr/colorOnPrimary"
         android:textAllCaps="false"

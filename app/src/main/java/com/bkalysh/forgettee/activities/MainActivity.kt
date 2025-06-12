@@ -144,6 +144,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupDeleteAllButton() {
         binding.btnDeleteAll.setOnClickListener {
+            vibrate(this@MainActivity)
             viewModel.removeAllActiveTodoItems()
             closeAllPopups()
         }
@@ -151,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupArchiveButton() {
         binding.btnArchive.setOnClickListener {
-            Toast.makeText(this, "TBD", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Not added yet 😢", Toast.LENGTH_SHORT).show()
             closeAllPopups()
         }
     }
