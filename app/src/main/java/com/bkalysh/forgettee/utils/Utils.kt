@@ -1,6 +1,7 @@
 package com.bkalysh.forgettee.utils
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -64,5 +65,10 @@ object Utils {
             SPAN_EXCLUSIVE_EXCLUSIVE
         )
         textView.text = spannable
+    }
+
+    fun isDarkTheme(context: Context): Boolean {
+        return (context.resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
 }
