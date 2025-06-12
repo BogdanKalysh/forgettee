@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  base sizes  -->
+    <dimen name="size_2_dp">2dp</dimen>
     <dimen name="size_6_dp">6dp</dimen>
     <dimen name="size_16_dp">16dp</dimen>
     <dimen name="size_24_dp">24dp</dimen>

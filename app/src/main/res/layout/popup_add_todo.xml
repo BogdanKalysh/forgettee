@@ -21,7 +21,9 @@
         android:textColor="?attr/colorOnPrimary"
         android:backgroundTint="@color/theme_red"
         android:textColorHint="?attr/colorOnSecondaryFixedVariant"
+        android:paddingHorizontal="@dimen/size_2_dp"
         android:hint="@string/what_will_you_do"
+        android:background="@drawable/edittext_underline"
 
         android:inputType="text"
         app:layout_constraintTop_toTopOf="parent"
