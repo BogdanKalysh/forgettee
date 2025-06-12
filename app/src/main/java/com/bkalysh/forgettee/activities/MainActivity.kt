@@ -131,8 +131,8 @@ class MainActivity : AppCompatActivity() {
         todoPopupBinding.btnAddTodo.setOnClickListener {
             vibrate(this@MainActivity)
             val todoText = todoPopupBinding.etTodoText.text.toString()
-            val listSize = toDoItemsAdapter.todoItems.size
-            val todoItems = parseTodoItemsFromInput(todoText, listSize)
+            val lastPosition = toDoItemsAdapter.todoItems.lastOrNull()?.position ?: 0
+            val todoItems = parseTodoItemsFromInput(todoText, lastPosition + 1)
 
             if (todoItems.isNotEmpty()) {
                 todoItems.forEach(viewModel::insertTodoItem)

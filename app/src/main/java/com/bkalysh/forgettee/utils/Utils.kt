@@ -25,7 +25,7 @@ object Utils {
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    fun parseTodoItemsFromInput(input: String, listSize: Int): List<ToDoItem> {
+    fun parseTodoItemsFromInput(input: String, startingPosition: Int): List<ToDoItem> {
         val now = Date()
         return input
             .lines()
@@ -38,7 +38,7 @@ object Utils {
                     isDone = false,
                     doneAt = now,
                     isRemoved = false,
-                    position = listSize + index
+                    position = startingPosition + index
                 )
             }
     }
