@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_add_todo"
+    android:background="@drawable/popup_add_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxWidth="480dp">
+
+    <EditText
+        android:id="@+id/et_todo_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_24_dp"
+
+        android:autofillHints="Input your todo task"
+        android:textSize="@dimen/edit_todo_text_size"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="?attr/colorOnPrimary"
+        android:backgroundTint="@color/theme_red"
+        android:textColorHint="?attr/colorOnSecondaryFixedVariant"
+        android:hint="@string/what_will_you_do"
+
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_todo"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/size_48_dp"
+        android:layout_marginHorizontal="@dimen/size_24_dp"
+        android:layout_marginBottom="@dimen/size_24_dp"
+        android:layout_marginTop="@dimen/size_16_dp"
+        android:background="@drawable/button_primary_background"
+        android:text="@string/add_button"
+        android:textColor="?attr/colorOnPrimary"
+        android:textAllCaps="false"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="@dimen/add_button_text_size"
+
+
+        app:layout_constraintTop_toBottomOf="@id/et_todo_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

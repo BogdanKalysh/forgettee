@@ -18,13 +18,14 @@ import com.bkalysh.forgettee.adapters.TodoItemsRecyclerViewAdapter
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ActivityMainBinding
 import com.bkalysh.forgettee.utils.Utils.focusOnEditText
-import com.bkalysh.forgettee.utils.Utils.hideKeyboard
 import com.bkalysh.forgettee.utils.Utils.parseTodoItemsFromInput
 import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bkalysh.forgettee.adapters.helpers.TodoItemTouchHelperCallback
+import com.bkalysh.forgettee.databinding.PopupAddTodoBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Date
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var toDoItemsAdapter: TodoItemsRecyclerViewAdapter
 
+    private lateinit var todoPopupBinding: PopupAddTodoBinding
+    private lateinit var todoPopup: BottomSheetDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,11 +44,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val bottomInset = if (isKeyboardVisible) ime.bottom else systemBars.bottom
-
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomInset)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         setupAddTodoPopupButton()
         setupMenu()
         setupDimmer()
-        setupAddTodoItemButton()
     }
 
     private fun setupTodoRecyclerViewAdapter() {
@@ -115,15 +114,24 @@ class MainActivity : AppCompatActivity() {
         setupArchiveButton()
     }
 
+    private fun openAddPopup() {
+        todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
+        setupAddTodoItemButton()
+        todoPopup = BottomSheetDialog(this)
+        focusOnEditText(todoPopupBinding.etTodoText)
+        todoPopup.setContentView(todoPopupBinding.root)
+        todoPopup.show()
+    }
+
     private fun setupAddTodoItemButton() {
-        binding.btnAddTodo.setOnClickListener {
-            val todoText = binding.etTodoText.text.toString()
+        todoPopupBinding.btnAddTodo.setOnClickListener {
+            val todoText = todoPopupBinding.etTodoText.text.toString()
             val listSize = toDoItemsAdapter.todoItems.size
             val todoItems = parseTodoItemsFromInput(todoText, listSize)
 
             if (todoItems.isNotEmpty()) {
                 todoItems.forEach(viewModel::insertTodoItem)
-                closeAllPopups()
+                todoPopup.dismiss()
             } else {
                 Toast.makeText(this,
                     getString(R.string.enter_todo_task_description),
@@ -151,17 +159,8 @@ class MainActivity : AppCompatActivity() {
         binding.clMenu.visibility = View.VISIBLE
     }
 
-    private fun openAddPopup() {
-        binding.dimmer.visibility = View.VISIBLE
-        focusOnEditText(binding.etTodoText)
-        binding.popupAddTodo.visibility = View.VISIBLE
-    }
-
     private fun closeAllPopups() {
         binding.dimmer.visibility = View.INVISIBLE
-        binding.etTodoText.text.clear()
-        binding.popupAddTodo.visibility = View.INVISIBLE
         binding.clMenu.visibility = View.INVISIBLE
-        hideKeyboard(binding.etTodoText)
     }
 }
