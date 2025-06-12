@@ -33,7 +33,6 @@
             android:id="@+id/btn_menu"
             android:layout_width="@dimen/size_48_dp"
             android:layout_height="@dimen/size_48_dp"
-            android:elevation="1dp"
             android:src="@drawable/icn_dots"
             android:background="@drawable/image_button_background"
             android:contentDescription="@string/menu"
@@ -56,7 +55,6 @@
         android:layout_width="@dimen/size_56_dp"
         android:layout_height="@dimen/size_56_dp"
         app:tint="@color/theme_red"
-        android:elevation="1dp"
         android:src="@drawable/icn_plus_sign"
         android:background="@drawable/image_button_background"
         android:contentDescription="@string/add_todo_item"
@@ -69,7 +67,6 @@
     <FrameLayout
         android:id="@+id/dimmer"
         android:visibility="invisible"
-        android:elevation="2dp"
         android:background="@color/dimmer_semi_transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -78,7 +75,6 @@
         android:id="@+id/cl_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="3dp"
         android:visibility="invisible"
         tools:visibility="visible"
         android:layout_marginEnd="@dimen/size_24_dp"
@@ -124,7 +120,6 @@
     
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/popup_add_todo"
-        android:elevation="3dp"
         android:visibility="invisible"
         tools:visibility="visible"
         android:background="@drawable/popup_add_background"
