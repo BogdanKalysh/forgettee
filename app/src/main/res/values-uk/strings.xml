@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  context descriptions  -->
+    <string name="menu">Меню</string>
+    <string name="add_todo_item">Додати завдання</string>
+
+    <!--  buttons text  -->
+    <string name="add_button">Додати</string>
+    <string name="delete_all">Видалити всі</string>
+    <string name="archive">Архів</string>
+
+    <!--  Placeholders for textview  -->
+    <string name="what_will_you_do">Що зробиш?</string>
+
+    <!--  Toast messages  -->
+    <string name="enter_todo_task_description">Введіть опис завдання</string>
+</resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Forgettee</string>
+    <string name="app_name" translatable="false">Forgettee</string>
 
     <!--  context descriptions  -->
     <string name="menu">Menu</string>
