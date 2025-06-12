@@ -52,8 +52,8 @@
 
     <ImageButton
         android:id="@+id/btn_add"
-        android:layout_width="@dimen/size_56_dp"
-        android:layout_height="@dimen/size_56_dp"
+        android:layout_width="@dimen/size_64_dp"
+        android:layout_height="@dimen/size_64_dp"
         app:tint="@color/theme_red"
         android:src="@drawable/icn_plus_sign"
         android:background="@drawable/image_button_ripple"
