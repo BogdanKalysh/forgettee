@@ -5,8 +5,14 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.text.SpannableString
+import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+import android.text.style.ForegroundColorSpan
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
 import java.util.Date
 
@@ -46,5 +52,17 @@ object Utils {
             context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
         vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+    }
+
+    fun setFirstLetterRed(textView: TextView) {
+        val text = textView.text.toString()
+        val spannable = SpannableString(text)
+        spannable.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(textView.context, R.color.theme_red)),
+            0,
+            1,
+            SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        textView.text = spannable
     }
 }

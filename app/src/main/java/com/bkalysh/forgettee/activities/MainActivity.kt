@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.bkalysh.forgettee.adapters.helpers.TodoItemTouchHelperCallback
 import com.bkalysh.forgettee.databinding.PopupAddTodoBinding
+import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Date
 
@@ -61,6 +62,8 @@ class MainActivity : AppCompatActivity() {
         setupAddTodoPopupButton()
         setupMenu()
         setupDimmer()
+
+        setFirstLetterRed(binding.tvAppName)
     }
 
     private fun setupTodoRecyclerViewAdapter() {
