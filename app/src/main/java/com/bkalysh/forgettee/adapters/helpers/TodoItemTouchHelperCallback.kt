@@ -23,10 +23,15 @@ class TodoItemTouchHelperCallback(
     private val toDoItemsAdapter: TodoItemsRecyclerViewAdapter,
     private val context: Context) : ItemTouchHelper.Callback() {
 
-    private val paint = Paint().apply {
+    private val redPaint = Paint().apply {
         color = ContextCompat.getColor(context, R.color.theme_red_translucent)
         isAntiAlias = true
     }
+    private val bluePaint = Paint().apply {
+        color = ContextCompat.getColor(context, R.color.accent_blue_translucent)
+        isAntiAlias = true
+    }
+    private var currentPaint = redPaint
 
     data class CircleState(
         var radius: Float = 0f,
@@ -64,17 +69,9 @@ class TodoItemTouchHelperCallback(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val position = viewHolder.adapterPosition
-        val item = toDoItemsAdapter.todoItems[position]
-
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-
-        return if (item.isDone) {
-            makeMovementFlags(dragFlags, swipeFlags)
-        } else {
-            makeMovementFlags(dragFlags, 0)
-        }
+        return makeMovementFlags(dragFlags, swipeFlags)
     }
 
     override fun isLongPressDragEnabled(): Boolean = true
@@ -151,6 +148,11 @@ class TodoItemTouchHelperCallback(
         if (swipeProgress > 0.5f && !radiusState.expanded && !radiusState.animating) {
             isRightSwipe = dX > 0
             animationPosition = viewHolder.adapterPosition
+            currentPaint = if (toDoItemsAdapter.todoItems[animationPosition].isDone) {
+                redPaint
+            } else {
+                bluePaint
+            }
             radiusState.removed = false
             radiusState.animating = true
             ValueAnimator.ofFloat(radiusState.radius, maxRadius).apply {
@@ -185,7 +187,7 @@ class TodoItemTouchHelperCallback(
 
         if (radiusState.radius > 0f) {
             c.withClip(clipPath) {
-                c.drawCircle(centerX, centerY, radiusState.radius, paint)
+                c.drawCircle(centerX, centerY, radiusState.radius, currentPaint)
             }
         }
 

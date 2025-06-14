@@ -52,7 +52,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/btn_add_todo"
+        android:id="@+id/btn_add_or_save_todo"
         android:layout_width="0dp"
         android:layout_height="@dimen/size_48_dp"
         android:layout_marginHorizontal="@dimen/size_24_dp"

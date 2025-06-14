@@ -8,6 +8,9 @@
     <color name="theme_red">#EE6A5E</color>
     <color name="theme_red_translucent">#80ED695C</color>
 
+    <color name="accent_blue">#347594</color>
+    <color name="accent_blue_translucent">#80347594</color>
+
     <!--  white theme colors  -->
     <color name="gray_98">#FAFAFA</color>
     <color name="gray_94">#F0F0F0</color>

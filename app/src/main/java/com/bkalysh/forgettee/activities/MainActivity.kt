@@ -81,8 +81,12 @@ class MainActivity : AppCompatActivity() {
             },
             object : TodoItemsRecyclerViewAdapter.OnItemSwipedListener {
                 override fun onItemSwiped(toDoItem: ToDoItem) {
-                    val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
-                    viewModel.updateTodoItem(updatedItem)
+                    if (toDoItem.isDone) {
+                        val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
+                        viewModel.updateTodoItem(updatedItem)
+                    } else {
+                        openEditTodoPopup(toDoItem)
+                    }
                 }
             },
             object : TodoItemsRecyclerViewAdapter.OnReorderListener {
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAddTodoPopupButton() {
-        binding.btnAdd.setOnClickListener { openAddPopup() }
+        binding.btnAdd.setOnClickListener { openAddTodoPopup() }
     }
 
     private fun setupDimmer() {
@@ -122,18 +126,58 @@ class MainActivity : AppCompatActivity() {
         setupArchiveButton()
     }
 
-    private fun openAddPopup() {
+    private fun openAddTodoPopup() {
         todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
-        setupAddTodoItemButton()
-        setupTodoEdittext()
         todoPopup = BottomSheetDialog(this)
         focusOnEditText(todoPopupBinding.etTodoText)
         todoPopup.setContentView(todoPopupBinding.root)
         todoPopup.show()
+        setupAddTodoItemButton()
+        setupTodoEdittext()
+    }
+
+    private fun openEditTodoPopup(toDoItem: ToDoItem) {
+        todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
+        todoPopupBinding.etTodoText.setText(toDoItem.text)
+        todoPopup = BottomSheetDialog(this)
+        focusOnEditText(todoPopupBinding.etTodoText)
+        todoPopup.setContentView(todoPopupBinding.root)
+        todoPopup.show()
+        setupSaveTodoItemButton(toDoItem)
+        setupTodoEdittext()
+    }
+
+    private fun setupSaveTodoItemButton(toDoItem: ToDoItem) {
+        todoPopupBinding.btnAddOrSaveTodo.text = getString(R.string.save_button)
+        todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
+            vibrate(this@MainActivity)
+            val updatedTodoText = todoPopupBinding.etTodoText.text.toString()
+            if (updatedTodoText.isNotEmpty()) {
+                val updatedTodo = toDoItem.copy(text = updatedTodoText)
+                viewModel.updateTodoItem(updatedTodo)
+                todoPopup.dismiss()
+            } else {
+                if (todoPopupBinding.textviewEmptyWarning.isGone) {
+                    val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_up)
+                    todoPopupBinding.textviewEmptyWarning.startAnimation(animation)
+                    todoPopupBinding.textviewEmptyWarning.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        // TODO ramake so right swipe is always delete and left swipe opens
+        //  the edit button, but doesn't swipe away the view
+        //  also right swipe will still be blocked if task is not DONE
+        //  Done task is only deletable both directions, no need to edit
+
+        // on dismissing the popup without editing task we need to add item back to the adapter
+        todoPopup.setOnDismissListener {
+            toDoItemsAdapter.todoItems = viewModel.activeTasks.value
+        }
     }
 
     private fun setupAddTodoItemButton() {
-        todoPopupBinding.btnAddTodo.setOnClickListener {
+        todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
             vibrate(this@MainActivity)
             val todoText = todoPopupBinding.etTodoText.text.toString()
             val lastPosition = toDoItemsAdapter.todoItems.lastOrNull()?.position ?: 0
