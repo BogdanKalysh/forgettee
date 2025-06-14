@@ -9,26 +9,47 @@
     android:layout_height="wrap_content"
     android:maxWidth="480dp">
 
-    <EditText
-        android:id="@+id/et_todo_text"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_todo_edittext"
+        android:layout_marginTop="@dimen/size_24_dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_24_dp"
+        app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            android:id="@+id/textview_empty_warning"
+            android:text="@string/enter_todo_task_description"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/theme_red"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/size_24_dp"
 
-        android:autofillHints="Input your todo task"
-        android:textSize="@dimen/edit_todo_text_size"
-        android:fontFamily="@font/montserrat_medium"
-        android:textColor="?attr/colorOnPrimary"
-        android:backgroundTint="@color/theme_red"
-        android:textColorHint="?attr/colorOnSecondaryFixedVariant"
-        android:paddingHorizontal="@dimen/size_2_dp"
-        android:hint="@string/what_will_you_do"
-        android:background="@drawable/edittext_underline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-        android:inputType="text"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <EditText
+            android:id="@+id/et_todo_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_24_dp"
+
+            android:autofillHints="Input your todo task"
+            android:textSize="@dimen/edit_todo_text_size"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="@color/theme_red"
+            android:textColorHint="?attr/colorOnSecondaryFixedVariant"
+            android:paddingHorizontal="@dimen/size_2_dp"
+            android:hint="@string/what_will_you_do"
+            android:background="@drawable/edittext_underline"
+
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/textview_empty_warning"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/btn_add_todo"
@@ -46,7 +67,7 @@
         android:textSize="@dimen/add_button_text_size"
 
 
-        app:layout_constraintTop_toBottomOf="@id/et_todo_text"
+        app:layout_constraintTop_toBottomOf="@id/container_todo_edittext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

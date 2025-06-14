@@ -2,12 +2,16 @@ package com.bkalysh.forgettee.activities
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -121,6 +125,7 @@ class MainActivity : AppCompatActivity() {
     private fun openAddPopup() {
         todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
         setupAddTodoItemButton()
+        setupTodoEdittext()
         todoPopup = BottomSheetDialog(this)
         focusOnEditText(todoPopupBinding.etTodoText)
         todoPopup.setContentView(todoPopupBinding.root)
@@ -138,9 +143,30 @@ class MainActivity : AppCompatActivity() {
                 todoItems.forEach(viewModel::insertTodoItem)
                 todoPopup.dismiss()
             } else {
-                Toast.makeText(this,
-                    getString(R.string.enter_todo_task_description),
-                    Toast.LENGTH_SHORT).show()
+                if (todoPopupBinding.textviewEmptyWarning.isGone) {
+                    val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_up)
+                    todoPopupBinding.textviewEmptyWarning.startAnimation(animation)
+                    todoPopupBinding.textviewEmptyWarning.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private var isAnimatingClose = false
+    private fun setupTodoEdittext() {
+        todoPopupBinding.etTodoText.doOnTextChanged { _,_,_,_ ->
+            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isAnimatingClose) {
+                isAnimatingClose = true
+                val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_down)
+                todoPopupBinding.textviewEmptyWarning.startAnimation(animation)
+                animation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation?) {}
+                    override fun onAnimationRepeat(animation: Animation?) {}
+                    override fun onAnimationEnd(animation: Animation?) {
+                        todoPopupBinding.textviewEmptyWarning.visibility = View.GONE
+                        isAnimatingClose = false
+                    }
+                })
             }
         }
     }
@@ -162,14 +188,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun openMenu() {
         binding.dimmer.visibility = View.VISIBLE
-        val animation = AnimationUtils.loadAnimation(this, R.anim.scale_down)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_down)
         binding.clMenu.startAnimation(animation)
         binding.clMenu.visibility = View.VISIBLE
     }
 
     private fun closeAllPopups() {
         binding.dimmer.visibility = View.INVISIBLE
-        val animation = AnimationUtils.loadAnimation(this, R.anim.scale_up)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_up)
         binding.clMenu.startAnimation(animation)
         binding.clMenu.visibility = View.INVISIBLE
     }

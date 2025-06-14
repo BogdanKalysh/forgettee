@@ -14,6 +14,5 @@
     <string name="what_will_you_do">What will you do?</string>
 
     <!--  Toast messages  -->
-    <string name="enter_todo_task_description">Enter todo task description</string>
-
+    <string name="enter_todo_task_description">*Enter todo task description</string>
 </resources>

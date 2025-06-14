@@ -13,5 +13,5 @@
     <string name="what_will_you_do">Що зробиш?</string>
 
     <!--  Toast messages  -->
-    <string name="enter_todo_task_description">Введіть опис завдання</string>
+    <string name="enter_todo_task_description">*Введіть опис завдання</string>
 </resources>
