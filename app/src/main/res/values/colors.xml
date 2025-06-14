@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="black_semi_transparent">#65000000</color>
     <color name="white_semi_transparent">#65FFFFFF</color>
 
     <color name="theme_red">#EE6A5E</color>
-    <color name="theme_red_desaturated">#E6857E</color>
+    <color name="theme_red_translucent">#80ED695C</color>
 
     <!--  white theme colors  -->
     <color name="gray_98">#FAFAFA</color>
@@ -18,4 +17,10 @@
     <color name="dark_27">#464646</color>
 
     <!--  dark theme colors  -->
+    <color name="night_9">#141118</color>
+    <color name="night_17">#26232C</color>
+    <color name="night_30">#423D4D</color>
+    <color name="night_39">#605F64</color>
+
+    <color name="bright_91">#E7E8DE</color>
 </resources>

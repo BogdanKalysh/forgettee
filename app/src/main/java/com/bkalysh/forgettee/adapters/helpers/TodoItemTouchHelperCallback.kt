@@ -24,7 +24,7 @@ class TodoItemTouchHelperCallback(
     private val context: Context) : ItemTouchHelper.Callback() {
 
     private val paint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.theme_red_desaturated)
+        color = ContextCompat.getColor(context, R.color.theme_red_translucent)
         isAntiAlias = true
     }
 

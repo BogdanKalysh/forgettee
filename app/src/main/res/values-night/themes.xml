@@ -3,14 +3,14 @@
     <style name="Base.Theme.Forgettee" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:colorAccent">@color/theme_red</item>
 
-        <item name="colorPrimary">@color/gray_94</item>
-        <item name="colorSecondary">@color/gray_98</item>
+        <item name="colorPrimary">@color/night_9</item>
+        <item name="colorSecondary">@color/night_17</item>
 
-        <item name="colorOnPrimary">@color/dark_27</item>
-        <item name="colorOnSecondary">@color/dark_27</item>
+        <item name="colorOnPrimary">@color/bright_91</item>
+        <item name="colorOnSecondary">@color/bright_91</item>
 
-        <item name="colorSecondaryVariant">@color/gray_87</item>
-        <item name="colorOnSecondaryFixedVariant">@color/gray_50</item>
+        <item name="colorSecondaryVariant">@color/night_30</item>
+        <item name="colorOnSecondaryFixedVariant">@color/night_39</item>
 
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>

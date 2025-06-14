@@ -46,7 +46,7 @@ class TodoItemsRecyclerViewAdapter(
                 root.setBackgroundResource(R.drawable.todo_item_done_background)
                 val textColor = if (isDarkTheme(root.context)) {
                     // In future will change to dark theme color
-                    ContextCompat.getColor(root.context, R.color.gray_50)
+                    ContextCompat.getColor(root.context, R.color.night_39)
                 } else {
                     ContextCompat.getColor(root.context, R.color.gray_50)
                 }
@@ -56,7 +56,7 @@ class TodoItemsRecyclerViewAdapter(
                 root.setBackgroundResource(R.drawable.todo_item_background)
                 val textColor = if (isDarkTheme(root.context)) {
                     // In future will change to dark theme color
-                    ContextCompat.getColor(root.context, R.color.dark_27)
+                    ContextCompat.getColor(root.context, R.color.bright_91)
                 } else {
                     ContextCompat.getColor(root.context, R.color.dark_27)
                 }
