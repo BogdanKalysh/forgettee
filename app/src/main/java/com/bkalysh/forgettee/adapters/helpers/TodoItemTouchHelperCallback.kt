@@ -80,8 +80,10 @@ class TodoItemTouchHelperCallback(
     override fun isLongPressDragEnabled(): Boolean = true
 
     private val circleState = CircleState()
-
     private var seekForward = true
+    private var isRightSwipe = false
+    private var animationPosition = 0
+
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -135,11 +137,24 @@ class TodoItemTouchHelperCallback(
             radiusState.reset()
         }
 
+        // handling quick swipe direction change after expand
+        if (swipeProgress < 0.5f && (isRightSwipe != dX > 0)) {
+            circleState.reset()
+        }
+
+        // handling quick swiping the other view after delete
+        if (animationPosition != viewHolder.adapterPosition &&
+            viewHolder.adapterPosition != -1) {
+            circleState.reset()
+        }
+
         if (swipeProgress > 0.5f && !radiusState.expanded && !radiusState.animating) {
+            isRightSwipe = dX > 0
+            animationPosition = viewHolder.adapterPosition
             radiusState.removed = false
             radiusState.animating = true
             ValueAnimator.ofFloat(radiusState.radius, maxRadius).apply {
-                duration = 300
+                duration = 150
                 interpolator = AccelerateDecelerateInterpolator()
                 addUpdateListener {
                     radiusState.radius = it.animatedValue as Float
@@ -154,7 +169,7 @@ class TodoItemTouchHelperCallback(
         } else if (swipeProgress <= 0.5f && radiusState.expanded && !radiusState.animating) {
             radiusState.animating = true
             ValueAnimator.ofFloat(radiusState.radius, 0f).apply {
-                duration = 200
+                duration = 150
                 interpolator = AccelerateInterpolator()
                 addUpdateListener {
                     radiusState.radius = it.animatedValue as Float
