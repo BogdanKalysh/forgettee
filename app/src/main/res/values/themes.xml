@@ -13,8 +13,5 @@
 
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>
-
-    <style name="Theme.Forgettee" parent="Base.Theme.Forgettee">
-
-    </style>
+    <style name="Theme.Forgettee" parent="Base.Theme.Forgettee" />
 </resources>

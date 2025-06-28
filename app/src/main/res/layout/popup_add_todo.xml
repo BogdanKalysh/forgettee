@@ -6,15 +6,16 @@
     android:id="@+id/popup_add_todo"
     android:background="@drawable/popup_add_background"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:maxWidth="480dp">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_todo_edittext"
         android:layout_marginTop="@dimen/size_24_dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
         <TextView
             android:id="@+id/textview_empty_warning"
             android:text="@string/enter_todo_task_description"
