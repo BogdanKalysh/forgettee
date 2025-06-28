@@ -73,4 +73,5 @@ object Utils {
 
     const val SHARED_PREFERENCES_SETTINGS_NAME = "settings"
     const val SHARED_PREFERENCES_THEME_MODE_ITEM = "theme_mode"
+    const val SHARED_PREFERENCES_DB_PREPOPULATED_ITEM = "db_prepopulated"
 }

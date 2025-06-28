@@ -22,4 +22,9 @@
     <!--  Toast messages  -->
     <string name="enter_todo_task_description">*Enter todo task description</string>
 
+    <!--  Tutorial tasks  -->
+    <string name="tutorial_task_finish">Click me to finish the task</string>
+    <string name="tutorial_task_edit">Swipe me to edit</string>
+    <string name="tutorial_task_delete">Swipe me to delete</string>
+    <string name="tutorial_task_reorder">Click and hold me to reorder</string>
 </resources>

@@ -20,4 +20,10 @@
 
     <!--  Toast messages  -->
     <string name="enter_todo_task_description">*Введіть опис завдання</string>
+
+    <!--  Tutorial tasks  -->
+    <string name="tutorial_task_finish">Натисни мене, щоб завершити завдання</string>
+    <string name="tutorial_task_edit">Свайпни мене, щоб редагувати</string>
+    <string name="tutorial_task_delete">Свайпни мене, щоб видалити</string>
+    <string name="tutorial_task_reorder">Натисни і тримай мене, щоб перемістити</string>
 </resources>

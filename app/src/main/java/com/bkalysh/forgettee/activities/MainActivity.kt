@@ -1,6 +1,6 @@
 package com.bkalysh.forgettee.activities
 
-import android.content.res.Configuration
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -37,6 +37,7 @@ import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Date
 import androidx.core.content.edit
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_DB_PREPOPULATED_ITEM
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_SETTINGS_NAME
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_THEME_MODE_ITEM
 import com.bkalysh.forgettee.utils.Utils.isDarkTheme
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var itemSwipeHelperCallback: TodoItemTouchHelperCallback
 
+    private lateinit var sharedPref: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -62,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        sharedPref = getSharedPreferences(SHARED_PREFERENCES_SETTINGS_NAME, MODE_PRIVATE)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.activeTasks.collect { todoItems ->
@@ -75,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         setupAddTodoPopupButton()
         setupMenu()
         setupDimmer()
-
+        prepopulateDbIfNeeded()
         setFirstLetterRed(binding.tvAppName)
     }
 
@@ -248,7 +251,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDarkThemeButton() {
-        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_SETTINGS_NAME, MODE_PRIVATE)
         val themeMode = sharedPref.getInt(SHARED_PREFERENCES_THEME_MODE_ITEM, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         AppCompatDelegate.setDefaultNightMode(themeMode)
 
@@ -264,13 +266,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
+    private fun prepopulateDbIfNeeded() {
+        val wasDbPrepopulated = sharedPref.getBoolean(SHARED_PREFERENCES_DB_PREPOPULATED_ITEM, false)
 
-        if ((newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK) !=
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)
-        ) {
-            recreate()
+        if (!wasDbPrepopulated) {
+            val taskNames = listOf(
+                getString(R.string.tutorial_task_finish),
+                getString(R.string.tutorial_task_edit),
+                getString(R.string.tutorial_task_delete),
+                getString(R.string.tutorial_task_reorder),
+            )
+
+            val tasks = taskNames.mapIndexed { index, text ->
+                val todo = parseTodoItemFromInput(text, index)
+                // setting one item to done state for deleting tutorial
+                todo.copy(isDone = todo.text == getString(R.string.tutorial_task_delete))
+            }
+
+            tasks.forEach { todo ->
+                viewModel.insertTodoItem(todo)
+            }
+            sharedPref.edit { putBoolean(SHARED_PREFERENCES_DB_PREPOPULATED_ITEM, true) }
         }
     }
 
