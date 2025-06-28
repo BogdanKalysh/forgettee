@@ -9,7 +9,8 @@
     <string name="add_button">Add</string>
     <string name="save_button">Save</string>
     <string name="delete_all">Delete all</string>
-    <string name="archive">Archive</string>
+    <string name="archive">Task archive</string>
+    <string name="change_theme">Change theme</string>
 
     <!--  IU texts  -->
     <string name="edit">Edit</string>

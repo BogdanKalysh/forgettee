@@ -70,4 +70,7 @@ object Utils {
         return (context.resources.configuration.uiMode and
                 Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
+
+    const val SHARED_PREFERENCES_SETTINGS_NAME = "settings"
+    const val SHARED_PREFERENCES_THEME_MODE_ITEM = "theme_mode"
 }

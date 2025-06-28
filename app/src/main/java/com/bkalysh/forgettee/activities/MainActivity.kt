@@ -1,5 +1,6 @@
 package com.bkalysh.forgettee.activities
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -7,6 +8,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
@@ -34,6 +36,10 @@ import com.bkalysh.forgettee.databinding.PopupAddTodoBinding
 import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Date
+import androidx.core.content.edit
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_SETTINGS_NAME
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_THEME_MODE_ITEM
+import com.bkalysh.forgettee.utils.Utils.isDarkTheme
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModel()
@@ -134,6 +140,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupDeleteAllButton()
         setupArchiveButton()
+        setupDarkThemeButton()
     }
 
     private fun openAddTodoPopup() {
@@ -237,6 +244,33 @@ class MainActivity : AppCompatActivity() {
         binding.btnArchive.setOnClickListener {
             Toast.makeText(this, "Not added yet 😢", Toast.LENGTH_SHORT).show()
             closeAllPopups()
+        }
+    }
+
+    private fun setupDarkThemeButton() {
+        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_SETTINGS_NAME, MODE_PRIVATE)
+        val themeMode = sharedPref.getInt(SHARED_PREFERENCES_THEME_MODE_ITEM, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        AppCompatDelegate.setDefaultNightMode(themeMode)
+
+        binding.tvChangeTheme.setOnClickListener {
+            val newThemeMode =
+                if (isDarkTheme(this)) {
+                    AppCompatDelegate.MODE_NIGHT_NO
+                } else {
+                    AppCompatDelegate.MODE_NIGHT_YES
+                }
+            AppCompatDelegate.setDefaultNightMode(newThemeMode)
+            sharedPref.edit { putInt(SHARED_PREFERENCES_THEME_MODE_ITEM, newThemeMode) }
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        if ((newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK) !=
+            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)
+        ) {
+            recreate()
         }
     }
 
