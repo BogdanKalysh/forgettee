@@ -6,6 +6,7 @@
 
     <!--  buttons text  -->
     <string name="add_button">Додати</string>
+    <string name="save_button">Зберегти</string>
     <string name="delete_all">Видалити всі</string>
     <string name="archive">Архів</string>
 

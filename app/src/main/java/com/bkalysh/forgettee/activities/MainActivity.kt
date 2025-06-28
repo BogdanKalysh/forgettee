@@ -81,8 +81,12 @@ class MainActivity : AppCompatActivity() {
             },
             object : TodoItemsRecyclerViewAdapter.OnItemSwipedListener {
                 override fun onItemSwiped(toDoItem: ToDoItem) {
-                    val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
-                    viewModel.updateTodoItem(updatedItem)
+                    if (toDoItem.isDone) {
+                        val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
+                        viewModel.updateTodoItem(updatedItem)
+                    } else {
+                        openEditTodoPopup(toDoItem)
+                    }
                 }
             },
             object : TodoItemsRecyclerViewAdapter.OnReorderListener {
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAddTodoPopupButton() {
-        binding.btnAdd.setOnClickListener { openAddPopup() }
+        binding.btnAdd.setOnClickListener { openAddTodoPopup() }
     }
 
     private fun setupDimmer() {
@@ -122,18 +126,53 @@ class MainActivity : AppCompatActivity() {
         setupArchiveButton()
     }
 
-    private fun openAddPopup() {
+    private fun openAddTodoPopup() {
         todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
-        setupAddTodoItemButton()
-        setupTodoEdittext()
         todoPopup = BottomSheetDialog(this)
         focusOnEditText(todoPopupBinding.etTodoText)
         todoPopup.setContentView(todoPopupBinding.root)
         todoPopup.show()
+        setupAddTodoItemButton()
+        setupTodoEdittext()
+    }
+
+    private fun openEditTodoPopup(toDoItem: ToDoItem) {
+        todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
+        todoPopupBinding.etTodoText.setText(toDoItem.text)
+        todoPopup = BottomSheetDialog(this)
+        focusOnEditText(todoPopupBinding.etTodoText)
+        todoPopup.setContentView(todoPopupBinding.root)
+        todoPopup.show()
+        setupSaveTodoItemButton(toDoItem)
+        setupTodoEdittext()
+    }
+
+    private fun setupSaveTodoItemButton(toDoItem: ToDoItem) {
+        todoPopupBinding.btnAddOrSaveTodo.text = getString(R.string.save_button)
+        todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
+            vibrate(this@MainActivity)
+            val updatedTodoText = todoPopupBinding.etTodoText.text.toString()
+            if (updatedTodoText.isNotEmpty()) {
+                val updatedTodo = toDoItem.copy(text = updatedTodoText)
+                viewModel.updateTodoItem(updatedTodo)
+                todoPopup.dismiss()
+            } else {
+                if (todoPopupBinding.textviewEmptyWarning.isGone) {
+                    val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_up)
+                    todoPopupBinding.textviewEmptyWarning.startAnimation(animation)
+                    todoPopupBinding.textviewEmptyWarning.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        // on dismissing the popup without editing task we need to add item back to the adapter
+        todoPopup.setOnDismissListener {
+            toDoItemsAdapter.todoItems = viewModel.activeTasks.value
+        }
     }
 
     private fun setupAddTodoItemButton() {
-        todoPopupBinding.btnAddTodo.setOnClickListener {
+        todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
             vibrate(this@MainActivity)
             val todoText = todoPopupBinding.etTodoText.text.toString()
             val lastPosition = toDoItemsAdapter.todoItems.lastOrNull()?.position ?: 0
@@ -152,11 +191,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var isAnimatingClose = false
+    private var isWarningAnimatingClose = false
     private fun setupTodoEdittext() {
         todoPopupBinding.etTodoText.doOnTextChanged { _,_,_,_ ->
-            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isAnimatingClose) {
-                isAnimatingClose = true
+            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isWarningAnimatingClose) {
+                isWarningAnimatingClose = true
                 val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_down)
                 todoPopupBinding.textviewEmptyWarning.startAnimation(animation)
                 animation.setAnimationListener(object : Animation.AnimationListener {
@@ -164,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onAnimationRepeat(animation: Animation?) {}
                     override fun onAnimationEnd(animation: Animation?) {
                         todoPopupBinding.textviewEmptyWarning.visibility = View.GONE
-                        isAnimatingClose = false
+                        isWarningAnimatingClose = false
                     }
                 })
             }

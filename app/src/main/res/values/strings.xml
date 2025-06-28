@@ -7,6 +7,7 @@
 
     <!--  buttons text  -->
     <string name="add_button">Add</string>
+    <string name="save_button">Save</string>
     <string name="delete_all">Delete all</string>
     <string name="archive">Archive</string>
 
@@ -15,4 +16,5 @@
 
     <!--  Toast messages  -->
     <string name="enter_todo_task_description">*Enter todo task description</string>
+
 </resources>
