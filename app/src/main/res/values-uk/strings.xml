@@ -10,6 +10,10 @@
     <string name="delete_all">Видалити всі</string>
     <string name="archive">Архів</string>
 
+    <!--  IU texts  -->
+    <string name="edit">Редагувати</string>
+    <string name="delete">Видалити</string>
+
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">Що зробиш?</string>
 

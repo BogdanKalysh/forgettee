@@ -9,11 +9,13 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withClip
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.adapters.TodoItemsRecyclerViewAdapter
+import com.bkalysh.forgettee.utils.Utils.isDarkTheme
 import com.bkalysh.forgettee.utils.Utils.vibrate
 import kotlin.math.abs
 import kotlin.math.hypot
@@ -31,11 +33,19 @@ class TodoItemTouchHelperCallback(
         color = ContextCompat.getColor(context, R.color.accent_blue_translucent)
         isAntiAlias = true
     }
+    private val textPaint = Paint().apply {
+        color = if (isDarkTheme(context)) {
+            ContextCompat.getColor(context, R.color.bright_91)
+        } else {
+            ContextCompat.getColor(context, R.color.dark_27)
+        }
+        isAntiAlias = true
+    }
     private var currentPaint = redPaint
 
     private var isSwipeBlocked = false
 
-    data class CircleState(
+    private data class CircleState(
         var radius: Float = 0f,
         var animating: Boolean = false,
         var expanded: Boolean = false,
@@ -198,6 +208,31 @@ class TodoItemTouchHelperCallback(
         if (circleState.radius > 0f) {
             c.withClip(clipPath) {
                 c.drawCircle(centerX, centerY, circleState.radius, currentPaint)
+            }
+        }
+
+        // drawing text with swipe function explanation§
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && abs(dX) > 0) {
+            val textCenterY = itemView.top + itemView.height / 2f + textPaint.textSize / 3
+
+            val text = if (toDoItemsAdapter.todoItems[animationPosition].isDone) {
+                context.getString(R.string.delete)
+            } else {
+                context.getString(R.string.edit)
+            }
+
+            textPaint.textSize = context.resources.getDimension(R.dimen.swipe_function_text_size)
+            textPaint.typeface = ResourcesCompat.getFont(context, R.font.montserrat_semibold)
+            textPaint.textAlign = Paint.Align.CENTER
+
+            val textCenterX = if (dX > 0) {
+                itemView.left + dX / 2f
+            } else {
+                itemView.right + dX / 2f
+            }
+
+            c.withClip(clipPath) {
+                c.drawText(text, textCenterX, textCenterY, textPaint)
             }
         }
 

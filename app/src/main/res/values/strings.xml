@@ -11,6 +11,10 @@
     <string name="delete_all">Delete all</string>
     <string name="archive">Archive</string>
 
+    <!--  IU texts  -->
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">What will you do?</string>
 
