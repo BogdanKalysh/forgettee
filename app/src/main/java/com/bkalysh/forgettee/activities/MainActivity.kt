@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var todoPopupBinding: PopupAddTodoBinding
     private lateinit var todoPopup: BottomSheetDialog
 
+    private lateinit var itemSwipeHelperCallback: TodoItemTouchHelperCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -86,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                         val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
                         viewModel.updateTodoItem(updatedItem)
                     } else {
+                        itemSwipeHelperCallback.blockSwipe()
                         openEditTodoPopup(toDoItem)
                     }
                 }
@@ -112,7 +115,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupItemSwipeHelper() {
-        val itemTouchHelper = ItemTouchHelper(TodoItemTouchHelperCallback(toDoItemsAdapter, this))
+        itemSwipeHelperCallback = TodoItemTouchHelperCallback(toDoItemsAdapter, this)
+        val itemTouchHelper = ItemTouchHelper(itemSwipeHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.rvTodoList)
     }
 
@@ -148,6 +152,9 @@ class MainActivity : AppCompatActivity() {
         todoPopup = BottomSheetDialog(this)
         focusOnEditText(todoPopupBinding.etTodoText)
         todoPopup.setContentView(todoPopupBinding.root)
+        todoPopup.setOnCancelListener {
+            itemSwipeHelperCallback.unBlockSwipe() //unblocking the swipe after clicking away
+        }
         todoPopup.show()
         setupSaveTodoItemButton(toDoItem)
         setupTodoEdittext()
@@ -159,6 +166,7 @@ class MainActivity : AppCompatActivity() {
             vibrate(this@MainActivity)
             val updatedTodoText = todoPopupBinding.etTodoText.text.toString()
             if (updatedTodoText.isNotEmpty()) {
+                itemSwipeHelperCallback.unBlockSwipe() //unblocking the swipe after updating item
                 val updatedTodo = toDoItem.copy(text = updatedTodoText)
                 viewModel.updateTodoItem(updatedTodo)
                 todoPopup.dismiss()

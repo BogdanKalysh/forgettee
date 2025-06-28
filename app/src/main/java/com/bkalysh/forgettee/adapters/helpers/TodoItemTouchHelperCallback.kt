@@ -33,6 +33,8 @@ class TodoItemTouchHelperCallback(
     }
     private var currentPaint = redPaint
 
+    private var isSwipeBlocked = false
+
     data class CircleState(
         var radius: Float = 0f,
         var animating: Boolean = false,
@@ -60,10 +62,13 @@ class TodoItemTouchHelperCallback(
         val item = toDoItemsAdapter.todoItems[position]
         toDoItemsAdapter.todoItems = toDoItemsAdapter.todoItems.toMutableList().apply { removeAt(position) }
         toDoItemsAdapter.onItemSwiped(item)
-        circleState.apply {
-            removed = true
+        circleStates[position]?.apply {
+            removed = true // for animation
         }
     }
+
+    fun blockSwipe() {isSwipeBlocked = true}
+    fun unBlockSwipe() {isSwipeBlocked = false}
 
     override fun getMovementFlags(
         recyclerView: RecyclerView,
@@ -71,15 +76,14 @@ class TodoItemTouchHelperCallback(
     ): Int {
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-        return makeMovementFlags(dragFlags, swipeFlags)
+        return makeMovementFlags(dragFlags, if (isSwipeBlocked) 0 else swipeFlags)
     }
 
     override fun isLongPressDragEnabled(): Boolean = true
 
-    private val circleState = CircleState()
+    private val circleStates = mutableMapOf<Int, CircleState>()
     private var seekForward = true
     private var isRightSwipe = false
-    private var animationPosition = 0
 
     override fun onChildDraw(
         c: Canvas,
@@ -90,16 +94,22 @@ class TodoItemTouchHelperCallback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        // implementing vibration on swipe
         val itemView = viewHolder.itemView
-        val swipeThreshold = 0.5f
         val swipeProgress = abs(dX) / itemView.width
+        val width = itemView.width.toFloat()
+        val height = itemView.height.toFloat()
+        val centerX = if (dX > 0) itemView.left.toFloat() else itemView.right.toFloat()
+        val centerY = itemView.top + height / 2f
+        val animationPosition = viewHolder.adapterPosition
+        val maxRadius = hypot(width, height)
 
+        // Vibrating on swipe
+        val vibrationThreshold = 0.5f
         if (isCurrentlyActive) {
-            if (seekForward && swipeProgress > swipeThreshold) {
+            if (seekForward && swipeProgress > vibrationThreshold) {
                 seekForward = false
                 vibrate(viewHolder.itemView.context)
-            } else if (!seekForward && swipeProgress < swipeThreshold) {
+            } else if (!seekForward && swipeProgress < vibrationThreshold) {
                 seekForward = true
                 vibrate(viewHolder.itemView.context)
             }
@@ -108,13 +118,14 @@ class TodoItemTouchHelperCallback(
         }
 
         //Drawing back wave
-        val width = itemView.width.toFloat()
-        val height = itemView.height.toFloat()
-        val centerX = if (dX > 0) itemView.left.toFloat() else itemView.right.toFloat()
-        val centerY = itemView.top + height / 2f
-        val maxRadius = hypot(width, height)
-
-        val radiusState = circleState
+        if (animationPosition == -1) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            return
+        }
+        if (circleStates[animationPosition] == null) {
+            circleStates[animationPosition] = CircleState()
+        }
+        val circleState = circleStates.getOrDefault(animationPosition, CircleState())
 
         val itemCornerRadius = context.resources.getDimensionPixelSize(R.dimen.item_corner_radius)
         val clipPath = Path().apply {
@@ -130,8 +141,8 @@ class TodoItemTouchHelperCallback(
         }
 
         // handling clearing swipe wave after removing
-        if (swipeProgress <= 0.5f && radiusState.removed) {
-            radiusState.reset()
+        if (swipeProgress <= 0.5f && circleState.removed) {
+            circleState.reset()
         }
 
         // handling quick swipe direction change after expand
@@ -145,49 +156,48 @@ class TodoItemTouchHelperCallback(
             circleState.reset()
         }
 
-        if (swipeProgress > 0.5f && !radiusState.expanded && !radiusState.animating) {
+        if (swipeProgress > 0.5f && !circleState.expanded && !circleState.animating) {
             isRightSwipe = dX > 0
-            animationPosition = viewHolder.adapterPosition
             currentPaint = if (toDoItemsAdapter.todoItems[animationPosition].isDone) {
                 redPaint
             } else {
                 bluePaint
             }
-            radiusState.removed = false
-            radiusState.animating = true
-            ValueAnimator.ofFloat(radiusState.radius, maxRadius).apply {
+            circleState.removed = false
+            circleState.animating = true
+            ValueAnimator.ofFloat(circleState.radius, maxRadius).apply {
                 duration = 150
                 interpolator = AccelerateDecelerateInterpolator()
                 addUpdateListener {
-                    radiusState.radius = it.animatedValue as Float
+                    circleState.radius = it.animatedValue as Float
                     recyclerView.invalidate()
                 }
                 doOnEnd {
-                    radiusState.animating = false
-                    radiusState.expanded = true
+                    circleState.animating = false
+                    circleState.expanded = true
                 }
                 start()
             }
-        } else if (swipeProgress <= 0.5f && radiusState.expanded && !radiusState.animating) {
-            radiusState.animating = true
-            ValueAnimator.ofFloat(radiusState.radius, 0f).apply {
+        } else if (swipeProgress <= 0.5f && circleState.expanded && !circleState.animating) {
+            circleState.animating = true
+            ValueAnimator.ofFloat(circleState.radius, 0f).apply {
                 duration = 150
                 interpolator = AccelerateInterpolator()
                 addUpdateListener {
-                    radiusState.radius = it.animatedValue as Float
+                    circleState.radius = it.animatedValue as Float
                     recyclerView.invalidate()
                 }
                 doOnEnd {
-                    radiusState.animating = false
-                    radiusState.expanded = false
+                    circleState.animating = false
+                    circleState.expanded = false
                 }
                 start()
             }
         }
 
-        if (radiusState.radius > 0f) {
+        if (circleState.radius > 0f) {
             c.withClip(clipPath) {
-                c.drawCircle(centerX, centerY, radiusState.radius, currentPaint)
+                c.drawCircle(centerX, centerY, circleState.radius, currentPaint)
             }
         }
 
