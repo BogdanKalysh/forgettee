@@ -23,7 +23,8 @@ import com.bkalysh.forgettee.adapters.TodoItemsRecyclerViewAdapter
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ActivityMainBinding
 import com.bkalysh.forgettee.utils.Utils.focusOnEditText
-import com.bkalysh.forgettee.utils.Utils.parseTodoItemsFromInput
+import com.bkalysh.forgettee.utils.Utils.parseTodoItemFromInput
+import com.bkalysh.forgettee.utils.Utils.increaseTodoItemsPositions
 import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
@@ -92,6 +93,11 @@ class MainActivity : AppCompatActivity() {
             object : TodoItemsRecyclerViewAdapter.OnReorderListener {
                 override fun onReorder(reorderedItems: List<ToDoItem>) {
                     viewModel.updateAllTodoItems(reorderedItems)
+                }
+            },
+            object : TodoItemsRecyclerViewAdapter.OnNewItemAddedToTopListener {
+                override fun onTopItemAdded() {
+                    binding.rvTodoList.scrollToPosition(0)
                 }
             })
 
@@ -175,11 +181,12 @@ class MainActivity : AppCompatActivity() {
         todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
             vibrate(this@MainActivity)
             val todoText = todoPopupBinding.etTodoText.text.toString()
-            val lastPosition = toDoItemsAdapter.todoItems.lastOrNull()?.position ?: 0
-            val todoItems = parseTodoItemsFromInput(todoText, lastPosition + 1)
 
-            if (todoItems.isNotEmpty()) {
-                todoItems.forEach(viewModel::insertTodoItem)
+            if (todoText.isNotEmpty()) {
+                val newTodoItem = parseTodoItemFromInput(todoText, 0)
+                val updatedItems = increaseTodoItemsPositions(viewModel.activeTasks.value)
+                updatedItems.forEach(viewModel::updateTodoItem) // updating positions to free the 0 position for the new item
+                viewModel.insertTodoItem(newTodoItem)
                 todoPopup.dismiss()
             } else {
                 if (todoPopupBinding.textviewEmptyWarning.isGone) {

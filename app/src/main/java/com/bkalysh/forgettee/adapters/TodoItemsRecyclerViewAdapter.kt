@@ -17,12 +17,21 @@ class TodoItemsRecyclerViewAdapter(
     private val toggleListener: OnTodoToggleListener,
     private val swipeListener: OnItemSwipedListener,
     private val reorderListener: OnReorderListener,
+    private val topItemAddListener: OnNewItemAddedToTopListener,
 ) : RecyclerView.Adapter<TodoItemsRecyclerViewAdapter.TodoViewHolder>(),
     ItemTouchHelperListener {
     var todoItems: List<ToDoItem>
         get() = differ.currentList
         set(value) {
-            differ.submitList(value)
+            val isAddedOnTop = value.isNotEmpty() &&
+                    differ.currentList.isNotEmpty() &&
+                    value[0].id != differ.currentList[0].id
+
+            differ.submitList(value) {
+                if (isAddedOnTop) {
+                    topItemAddListener.onTopItemAdded()
+                }
+            }
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
@@ -86,6 +95,10 @@ class TodoItemsRecyclerViewAdapter(
 
     interface OnReorderListener {
         fun onReorder(reorderedItems: List<ToDoItem>)
+    }
+
+    interface OnNewItemAddedToTopListener {
+        fun onTopItemAdded()
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<ToDoItem>() {

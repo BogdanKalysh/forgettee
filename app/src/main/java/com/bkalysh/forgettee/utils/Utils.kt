@@ -25,22 +25,21 @@ object Utils {
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
 
-    fun parseTodoItemsFromInput(input: String, startingPosition: Int): List<ToDoItem> {
+    fun parseTodoItemFromInput(input: String, position: Int): ToDoItem {
         val now = Date()
-        return input
-            .lines()
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-            .mapIndexed { index, line ->
-                ToDoItem(
-                    text = line,
-                    createdAt = now,
-                    isDone = false,
-                    doneAt = now,
-                    isRemoved = false,
-                    position = startingPosition + index
-                )
-            }
+        return ToDoItem(
+            text = input,
+            createdAt = now,
+            isDone = false,
+            doneAt = now,
+            isRemoved = false,
+            position = position
+        )
+    }
+
+    fun increaseTodoItemsPositions(todoItems: List<ToDoItem>): List<ToDoItem> {
+        return todoItems
+                .map { item -> item.copy(position = item.position + 1) }
     }
 
 
