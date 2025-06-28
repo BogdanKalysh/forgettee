@@ -165,11 +165,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // TODO ramake so right swipe is always delete and left swipe opens
-        //  the edit button, but doesn't swipe away the view
-        //  also right swipe will still be blocked if task is not DONE
-        //  Done task is only deletable both directions, no need to edit
-
         // on dismissing the popup without editing task we need to add item back to the adapter
         todoPopup.setOnDismissListener {
             toDoItemsAdapter.todoItems = viewModel.activeTasks.value
@@ -196,11 +191,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var isAnimatingClose = false
+    private var isWarningAnimatingClose = false
     private fun setupTodoEdittext() {
         todoPopupBinding.etTodoText.doOnTextChanged { _,_,_,_ ->
-            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isAnimatingClose) {
-                isAnimatingClose = true
+            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isWarningAnimatingClose) {
+                isWarningAnimatingClose = true
                 val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_down)
                 todoPopupBinding.textviewEmptyWarning.startAnimation(animation)
                 animation.setAnimationListener(object : Animation.AnimationListener {
@@ -208,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onAnimationRepeat(animation: Animation?) {}
                     override fun onAnimationEnd(animation: Animation?) {
                         todoPopupBinding.textviewEmptyWarning.visibility = View.GONE
-                        isAnimatingClose = false
+                        isWarningAnimatingClose = false
                     }
                 })
             }
