@@ -3,6 +3,7 @@
     <!--  base sizes  -->
     <dimen name="size_2_dp">2dp</dimen>
     <dimen name="size_6_dp">6dp</dimen>
+    <dimen name="size_8_dp">8dp</dimen>
     <dimen name="size_16_dp">16dp</dimen>
     <dimen name="size_24_dp">24dp</dimen>
     <dimen name="size_32_dp">32dp</dimen>
@@ -24,4 +25,8 @@
     <dimen name="add_button_text_size">16sp</dimen>
     <dimen name="menu_button_text_size">16sp</dimen>
     <dimen name="edit_todo_text_size">16sp</dimen>
+    <dimen name="week_separator_text_size">10sp</dimen>
+    <dimen name="day_separator_text_size">12sp</dimen>
+    <dimen name="archive_todo_item_text_size">12sp</dimen>
+    <dimen name="day_count_chip_text_size">10sp</dimen>
 </resources>

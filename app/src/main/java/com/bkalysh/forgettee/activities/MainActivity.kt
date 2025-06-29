@@ -1,11 +1,11 @@
 package com.bkalysh.forgettee.activities
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -141,7 +141,6 @@ class MainActivity : AppCompatActivity() {
         binding.btnMenu.setOnClickListener {
             openMenu()
         }
-        setupDeleteAllButton()
         setupArchiveButton()
         setupDarkThemeButton()
     }
@@ -162,8 +161,12 @@ class MainActivity : AppCompatActivity() {
         todoPopup = BottomSheetDialog(this)
         focusOnEditText(todoPopupBinding.etTodoText)
         todoPopup.setContentView(todoPopupBinding.root)
-        todoPopup.setOnCancelListener {
-            itemSwipeHelperCallback.unBlockSwipe() //unblocking the swipe after clicking away
+        todoPopup.setOnDismissListener {
+            // on dismissing the popup without editing task we need to add item back to the adapter
+            toDoItemsAdapter.todoItems = viewModel.activeTasks.value
+
+            //unblocking the swipe after clicking away
+            itemSwipeHelperCallback.unBlockSwipe()
         }
         todoPopup.show()
         setupSaveTodoItemButton(toDoItem)
@@ -187,11 +190,6 @@ class MainActivity : AppCompatActivity() {
                     todoPopupBinding.textviewEmptyWarning.visibility = View.VISIBLE
                 }
             }
-        }
-
-        // on dismissing the popup without editing task we need to add item back to the adapter
-        todoPopup.setOnDismissListener {
-            toDoItemsAdapter.todoItems = viewModel.activeTasks.value
         }
     }
 
@@ -235,17 +233,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDeleteAllButton() {
-        binding.btnDeleteAll.setOnClickListener {
-            vibrate(this@MainActivity)
-            viewModel.removeAllActiveTodoItems()
-            closeAllPopups()
-        }
-    }
-
     private fun setupArchiveButton() {
         binding.btnArchive.setOnClickListener {
-            Toast.makeText(this, "Not added yet 😢", Toast.LENGTH_SHORT).show()
+            val archiveIntent = Intent(this, ArchiveActivity::class.java)
+            startActivity(archiveIntent)
             closeAllPopups()
         }
     }
