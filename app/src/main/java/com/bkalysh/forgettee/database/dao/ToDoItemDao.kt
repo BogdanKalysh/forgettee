@@ -25,9 +25,6 @@ interface ToDoItemDao {
     @Query("SELECT * FROM todo_items WHERE is_removed = 1 ORDER BY done_at DESC")
     fun getAllDone(): Flow<List<ToDoItem>>
 
-    @Query("UPDATE todo_items SET is_removed = 1 WHERE is_removed = 0")
-    suspend fun removeAllActive()
-
     @Delete
     suspend fun delete(item: ToDoItem)
 }

@@ -141,7 +141,6 @@ class MainActivity : AppCompatActivity() {
         binding.btnMenu.setOnClickListener {
             openMenu()
         }
-        setupDeleteAllButton()
         setupArchiveButton()
         setupDarkThemeButton()
     }
@@ -231,14 +230,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
             }
-        }
-    }
-
-    private fun setupDeleteAllButton() {
-        binding.btnDeleteAll.setOnClickListener {
-            vibrate(this@MainActivity)
-            viewModel.removeAllActiveTodoItems()
-            closeAllPopups()
         }
     }
 
