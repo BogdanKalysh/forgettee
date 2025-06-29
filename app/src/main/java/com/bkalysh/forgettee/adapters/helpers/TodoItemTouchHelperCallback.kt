@@ -75,6 +75,7 @@ class TodoItemTouchHelperCallback(
         circleStates[position]?.apply {
             removed = true // for animation
         }
+        seekForward = true // start to seek forward vibration threshold after swipe
     }
 
     fun blockSwipe() {isSwipeBlocked = true}
@@ -115,16 +116,15 @@ class TodoItemTouchHelperCallback(
 
         // Vibrating on swipe
         val vibrationThreshold = 0.5f
-        if (isCurrentlyActive) {
-            if (seekForward && swipeProgress > vibrationThreshold) {
-                seekForward = false
-                vibrate(viewHolder.itemView.context)
-            } else if (!seekForward && swipeProgress < vibrationThreshold) {
-                seekForward = true
-                vibrate(viewHolder.itemView.context)
-            }
-        } else {
+        val vibrationLimit = 1f
+        if (seekForward && swipeProgress > vibrationThreshold
+            && swipeProgress < vibrationLimit // don't vibrate on frames drawn after swipe
+            ) {
+            seekForward = false
+            vibrate(viewHolder.itemView.context)
+        } else if (!seekForward && swipeProgress < vibrationThreshold) {
             seekForward = true
+            vibrate(viewHolder.itemView.context)
         }
 
         //Drawing back wave
