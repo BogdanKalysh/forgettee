@@ -3,6 +3,7 @@ package com.bkalysh.forgettee
 import androidx.room.Room
 import com.bkalysh.forgettee.database.ForgetteeDatabase
 import com.bkalysh.forgettee.database.repository.ToDoItemRepository
+import com.bkalysh.forgettee.viewmodel.ArchiveViewModel
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,4 +18,5 @@ val appModule = module {
     single { ToDoItemRepository(get<ForgetteeDatabase>().toDoItemDao) }
 
     viewModel { MainViewModel(get()) }
+    viewModel { ArchiveViewModel(get()) }
 }

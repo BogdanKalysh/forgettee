@@ -83,7 +83,7 @@
         <TextView
             android:id="@+id/btn_archive"
 
-            android:text="@string/archive"
+            android:text="@string/archive_descriptor"
 
             android:textAllCaps="false"
             android:gravity="center_vertical"
