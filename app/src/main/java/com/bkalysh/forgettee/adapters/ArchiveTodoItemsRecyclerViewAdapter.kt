@@ -1,16 +1,15 @@
 package com.bkalysh.forgettee.adapters
 
-import android.icu.util.Calendar
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ItemArchiveDaySeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchiveWeekSeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchivedTodoBinding
+import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.formatCompleteTimePeriod
 
 class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDeleteTodoListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var archiveItems: List<UiItem>
@@ -65,24 +64,11 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
     inner class TodoViewHolder(private val binding: ItemArchivedTodoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindData(toDoItem: ToDoItem) {
             binding.apply {
-                val currentCalendar = Calendar.getInstance()
-                currentCalendar.time = toDoItem.doneAt
-
                 // Display task text
                 tvTaskText.text = toDoItem.text
-
-                // Display day count on chip
-                val daysToFinish = run {
-                    val startCalendar = Calendar.getInstance()
-                    startCalendar.time = toDoItem.createdAt
-                    currentCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR) + 1
-                }
-
-                val context = itemView.context
-                val dayCountText = context.resources.getQuantityString(R.plurals.day_count, daysToFinish, daysToFinish)
-                tvDayCount.text = dayCountText
-
-                // setting up delete item button
+                // Display time it took to complete the task
+                tvDayCount.text = formatCompleteTimePeriod(toDoItem.createdAt, toDoItem.doneAt, itemView.context)
+                // Setting up delete item button
                 btnDeleteItem.setOnClickListener {
                     onDeleteListener.onTodoDelete(toDoItem)
                 }

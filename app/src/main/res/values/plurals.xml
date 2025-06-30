@@ -4,4 +4,8 @@
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
     </plurals>
+    <plurals name="hour_count">
+        <item quantity="one">%d hr.</item>
+        <item quantity="other">%d hrs.</item>
+    </plurals>
 </resources>

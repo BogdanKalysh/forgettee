@@ -5,4 +5,9 @@
         <item quantity="few">%d дні</item>
         <item quantity="many">%d днів</item>
     </plurals>
+    <plurals name="hour_count">
+        <item quantity="one">%d год.</item>
+        <item quantity="few">%d год.</item>
+        <item quantity="many">%d год.</item>
+    </plurals>
 </resources>
