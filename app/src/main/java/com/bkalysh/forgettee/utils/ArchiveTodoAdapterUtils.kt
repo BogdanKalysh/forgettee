@@ -64,7 +64,7 @@ object ArchiveTodoAdapterUtils {
         val weekStartStr = formatter.format(weekStart.time)
         val weekEndStr = formatter.format(weekEnd.time)
 
-        return context.getString(R.string.week_range, weekEndStr, weekStartStr)
+        return context.getString(R.string.week_range, weekStartStr, weekEndStr)
     }
 
     private fun formatDay(date: Date): String {
