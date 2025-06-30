@@ -3,6 +3,8 @@
     <!--  context descriptions  -->
     <string name="menu">Меню</string>
     <string name="add_todo_item">Додати завдання</string>
+    <string name="delete_todo_item">Видалити завдання</string>
+
 
     <!--  buttons text  -->
     <string name="add_button">Додати</string>

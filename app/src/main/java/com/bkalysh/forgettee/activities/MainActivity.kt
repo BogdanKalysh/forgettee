@@ -147,6 +147,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openAddTodoPopup() {
         todoPopupBinding = PopupAddTodoBinding.inflate(layoutInflater)
+        todoPopupBinding.btnDeleteItem.visibility = View.GONE
         todoPopup = BottomSheetDialog(this)
         focusOnEditText(todoPopupBinding.etTodoText)
         todoPopup.setContentView(todoPopupBinding.root)
@@ -170,6 +171,7 @@ class MainActivity : AppCompatActivity() {
         }
         todoPopup.show()
         setupSaveTodoItemButton(toDoItem)
+        setupDeleteTodoItemButton(toDoItem)
         setupTodoEdittext()
     }
 
@@ -190,6 +192,14 @@ class MainActivity : AppCompatActivity() {
                     todoPopupBinding.textviewEmptyWarning.visibility = View.VISIBLE
                 }
             }
+        }
+    }
+
+    private fun setupDeleteTodoItemButton(toDoItem: ToDoItem) {
+        todoPopupBinding.btnDeleteItem.setOnClickListener {
+            viewModel.deleteTodoItem(toDoItem)
+            vibrate(this@MainActivity)
+            todoPopup.dismiss()
         }
     }
 

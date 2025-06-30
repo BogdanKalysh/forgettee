@@ -43,4 +43,13 @@ class MainViewModel(private val repository: ToDoItemRepository): ViewModel() {
             repository.update(item)
         }
     }
+
+    fun deleteTodoItem(item: ToDoItem) {
+        // instantly deleting the item from the list
+        _activeTasks.value = _activeTasks.value.filter { it.id != item.id }
+
+        viewModelScope.launch {
+            repository.delete(item)
+        }
+    }
 }

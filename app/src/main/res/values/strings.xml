@@ -4,6 +4,7 @@
     <!--  context descriptions  -->
     <string name="menu">Menu</string>
     <string name="add_todo_item">Add todo item</string>
+    <string name="delete_todo_item">Delete todo item</string>
 
     <!--  buttons text  -->
     <string name="add_button">Add</string>
