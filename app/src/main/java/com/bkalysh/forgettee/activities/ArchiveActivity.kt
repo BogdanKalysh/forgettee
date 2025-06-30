@@ -13,6 +13,7 @@ import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.adapters.ArchiveTodoItemsRecyclerViewAdapter
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ActivityArchiveBinding
+import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.generateUiItems
 import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
 import com.bkalysh.forgettee.viewmodel.ArchiveViewModel
 import kotlinx.coroutines.launch
@@ -39,7 +40,7 @@ class ArchiveActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.doneTasks.collect { todoItems ->
-                    toDoArchiveItemsAdapter.todoItems = todoItems
+                    toDoArchiveItemsAdapter.archiveItems = generateUiItems(todoItems, this@ArchiveActivity)
                 }
             }
         }
@@ -52,11 +53,7 @@ class ArchiveActivity : AppCompatActivity() {
         toDoArchiveItemsAdapter = ArchiveTodoItemsRecyclerViewAdapter(
             object : ArchiveTodoItemsRecyclerViewAdapter.OnDeleteTodoListener {
                 override fun onTodoDelete(toDoItem: ToDoItem) {
-                    val deletedIndex = viewModel.doneTasks.value.indexOf(toDoItem)
                     viewModel.deleteTodoItem(toDoItem)
-                    if (deletedIndex < toDoArchiveItemsAdapter.todoItems.size) {
-                        toDoArchiveItemsAdapter.notifyItemChanged(deletedIndex)
-                    }
                 }
             },
         )

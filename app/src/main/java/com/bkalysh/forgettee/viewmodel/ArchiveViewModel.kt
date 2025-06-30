@@ -22,6 +22,9 @@ class ArchiveViewModel(private val repository: ToDoItemRepository): ViewModel() 
     }
 
     fun deleteTodoItem(item: ToDoItem) {
+        // instantly deleting the item from the list
+        _doneTasks.value = _doneTasks.value.filter { it.id != item.id }
+
         viewModelScope.launch {
             repository.delete(item)
         }

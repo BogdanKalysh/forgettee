@@ -2,118 +2,119 @@ package com.bkalysh.forgettee.adapters
 
 import android.icu.util.Calendar
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
+import com.bkalysh.forgettee.databinding.ItemArchiveDaySeparatorBinding
+import com.bkalysh.forgettee.databinding.ItemArchiveWeekSeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchivedTodoBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-
-class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDeleteTodoListener) : RecyclerView.Adapter<ArchiveTodoItemsRecyclerViewAdapter.TodoViewHolder>() {
-    var todoItems: List<ToDoItem>
+class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDeleteTodoListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var archiveItems: List<UiItem>
         get() = differ.currentList
-        set(value) {
-            differ.submitList(value)
-        }
+        set(value) { differ.submitList(value) }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        return TodoViewHolder(
-            ItemArchivedTodoBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent, false
-            )
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+
+        return when (viewType) {
+            VIEW_TYPE_TODO -> {
+                val binding = ItemArchivedTodoBinding.inflate(inflater, parent, false)
+                TodoViewHolder(binding)
+            }
+            VIEW_TYPE_WEEK_HEADER -> {
+                val binding = ItemArchiveWeekSeparatorBinding.inflate(inflater, parent, false)
+                WeekSeparatorViewHolder(binding)
+            }
+            VIEW_TYPE_DAY_HEADER -> {
+                val binding = ItemArchiveDaySeparatorBinding.inflate(inflater, parent, false)
+                DaySeparatorViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Unknown viewType $viewType")
+        }
     }
 
-    override fun getItemCount(): Int = todoItems.size
+    override fun getItemViewType(position: Int): Int {
+        return when (archiveItems[position]) {
+            is UiItem.ToDo -> VIEW_TYPE_TODO
+            is UiItem.WeekSeparator -> VIEW_TYPE_WEEK_HEADER
+            is UiItem.DaySeparator -> VIEW_TYPE_DAY_HEADER
+        }
+    }
 
-    override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        holder.binding.apply {
-            val toDoItem = todoItems[position]
-            val currentCalendar = Calendar.getInstance()
-            currentCalendar.time = toDoItem.doneAt
+    override fun getItemCount(): Int = archiveItems.size
 
-            // Displaying task text
-            tvTaskText.text = toDoItem.text
-
-
-            // Displaying week separator
-            val currentWeek = currentCalendar.get(Calendar.WEEK_OF_YEAR)
-            val showWeekSeparator = position == 0 || run {
-                val prevCalendar = Calendar.getInstance()
-                prevCalendar.time = todoItems[position - 1].doneAt
-                val prevWeek = prevCalendar.get(Calendar.WEEK_OF_YEAR)
-                prevWeek != currentWeek
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val archiveItem = archiveItems[position]
+        when {
+            holder is TodoViewHolder && archiveItem is UiItem.ToDo -> {
+                holder.bindData(archiveItem.item)
             }
-
-            if (showWeekSeparator) {
-                containerWeekSeparator.visibility = View.VISIBLE
-
-                val weekStart = currentCalendar.clone() as Calendar
-                weekStart.set(Calendar.DAY_OF_WEEK, weekStart.firstDayOfWeek)
-
-                val weekEnd = currentCalendar.clone() as Calendar
-                weekEnd.set(Calendar.DAY_OF_WEEK, weekStart.firstDayOfWeek + 6)
-
-                val formatter = SimpleDateFormat("d MMM", Locale.getDefault())
-                val weekStartStr = formatter.format(weekStart.time)
-                val weekEndStr = formatter.format(weekEnd.time)
-
-                val weekRangeText = holder.itemView.context.getString(R.string.week_range, weekEndStr, weekStartStr)
-                tvWeekSeparatorText.text = weekRangeText
-            } else {
-                containerWeekSeparator.visibility = View.GONE
+            holder is WeekSeparatorViewHolder && archiveItem is UiItem.WeekSeparator -> {
+                holder.bindData(archiveItem.text)
             }
-
-
-            // Displaying date separator
-            val currentDay = currentCalendar.get(Calendar.DAY_OF_YEAR)
-            val showDaySeparator = position == 0 || run {
-                val prevCalendar = Calendar.getInstance()
-                prevCalendar.time = todoItems[position - 1].doneAt
-                val prevDay = prevCalendar.get(Calendar.DAY_OF_YEAR)
-                prevDay != currentDay
-            }
-
-            if (showDaySeparator) {
-                tvDaySeparator.visibility = View.VISIBLE
-                val formatter = SimpleDateFormat("d MMM", Locale.getDefault())
-                val dateStr = formatter.format(currentCalendar.time)
-                tvDaySeparator.text = dateStr
-            } else {
-                tvDaySeparator.visibility = View.GONE
-            }
-
-            // Display day count on chip
-            val daysToFinish = run {
-                val startCalendar = Calendar.getInstance()
-                startCalendar.time = toDoItem.createdAt
-                currentCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR) + 1
-            }
-
-            val context = holder.itemView.context
-            val dayCountText = context.resources.getQuantityString(R.plurals.day_count, daysToFinish, daysToFinish)
-            tvDayCount.text = dayCountText
-
-            // setting up delete item button
-            btnDeleteItem.setOnClickListener {
-                onDeleteListener.onTodoDelete(toDoItem)
+            holder is DaySeparatorViewHolder && archiveItem is UiItem.DaySeparator -> {
+                holder.bindData(archiveItem.text)
             }
         }
     }
 
-    inner class TodoViewHolder(val binding: ItemArchivedTodoBinding) : RecyclerView.ViewHolder(binding.root)
-    private val diffCallback = object : DiffUtil.ItemCallback<ToDoItem>() {
-        override fun areItemsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean {
-            return oldItem.id == newItem.id
+    inner class TodoViewHolder(private val binding: ItemArchivedTodoBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindData(toDoItem: ToDoItem) {
+            binding.apply {
+                val currentCalendar = Calendar.getInstance()
+                currentCalendar.time = toDoItem.doneAt
+
+                // Display task text
+                tvTaskText.text = toDoItem.text
+
+                // Display day count on chip
+                val daysToFinish = run {
+                    val startCalendar = Calendar.getInstance()
+                    startCalendar.time = toDoItem.createdAt
+                    currentCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR) + 1
+                }
+
+                val context = itemView.context
+                val dayCountText = context.resources.getQuantityString(R.plurals.day_count, daysToFinish, daysToFinish)
+                tvDayCount.text = dayCountText
+
+                // setting up delete item button
+                btnDeleteItem.setOnClickListener {
+                    onDeleteListener.onTodoDelete(toDoItem)
+                }
+            }
+        }
+    }
+    inner class WeekSeparatorViewHolder(private val binding: ItemArchiveWeekSeparatorBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindData(weekHeader: String) {
+            binding.apply {
+                tvWeekSeparatorText.text = weekHeader
+            }
+        }
+    }
+    inner class DaySeparatorViewHolder(private val binding: ItemArchiveDaySeparatorBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindData(dayHeader: String) {
+            binding.apply {
+                tvDaySeparator.text = dayHeader
+            }
+        }
+    }
+
+    private val diffCallback = object : DiffUtil.ItemCallback<UiItem>() {
+        override fun areItemsTheSame(oldItem: UiItem, newItem: UiItem): Boolean {
+            return when {
+                oldItem is UiItem.ToDo && newItem is UiItem.ToDo -> oldItem.item.id == newItem.item.id
+                oldItem is UiItem.WeekSeparator && newItem is UiItem.WeekSeparator -> oldItem.text == newItem.text
+                oldItem is UiItem.DaySeparator && newItem is UiItem.DaySeparator -> oldItem.text == newItem.text
+                else -> false
+            }
         }
 
-        override fun areContentsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean {
+        override fun areContentsTheSame(oldItem: UiItem, newItem: UiItem): Boolean {
             return oldItem == newItem
         }
     }
@@ -121,5 +122,17 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
 
     interface OnDeleteTodoListener {
         fun onTodoDelete(toDoItem: ToDoItem)
+    }
+
+    sealed class UiItem {
+        data class ToDo(val item: ToDoItem) : UiItem()
+        data class WeekSeparator(val text: String) : UiItem()
+        data class DaySeparator(val text: String) : UiItem()
+    }
+
+    private companion object {
+        const val VIEW_TYPE_TODO = 0
+        const val VIEW_TYPE_WEEK_HEADER = 1
+        const val VIEW_TYPE_DAY_HEADER = 2
     }
 }
