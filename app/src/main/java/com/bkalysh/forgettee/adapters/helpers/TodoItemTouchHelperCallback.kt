@@ -216,7 +216,7 @@ class TodoItemTouchHelperCallback(
             val textCenterY = itemView.top + itemView.height / 2f + textPaint.textSize / 3
 
             val text = if (toDoItemsAdapter.todoItems[animationPosition].isDone) {
-                context.getString(R.string.delete)
+                context.getString(R.string.complete)
             } else {
                 context.getString(R.string.edit)
             }
