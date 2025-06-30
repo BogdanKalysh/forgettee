@@ -18,6 +18,7 @@
     <string name="edit">Редагувати</string>
     <string name="complete">Завершити</string>
     <string name="archive">Архів</string>
+    <string name="deleted_toast_text">Видалено: %1$s</string>
 
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">Що зробиш?</string>

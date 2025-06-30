@@ -15,6 +15,7 @@ import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ActivityArchiveBinding
 import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.generateUiItems
 import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
+import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.ArchiveViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,6 +54,7 @@ class ArchiveActivity : AppCompatActivity() {
         toDoArchiveItemsAdapter = ArchiveTodoItemsRecyclerViewAdapter(
             object : ArchiveTodoItemsRecyclerViewAdapter.OnDeleteTodoListener {
                 override fun onTodoDelete(toDoItem: ToDoItem) {
+                    vibrate(this@ArchiveActivity)
                     viewModel.deleteTodoItem(toDoItem)
                 }
             },

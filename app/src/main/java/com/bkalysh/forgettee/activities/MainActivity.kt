@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -199,6 +200,7 @@ class MainActivity : AppCompatActivity() {
         todoPopupBinding.btnDeleteItem.setOnClickListener {
             viewModel.deleteTodoItem(toDoItem)
             vibrate(this@MainActivity)
+            Toast.makeText(this, getString(R.string.deleted_toast_text, toDoItem.text), Toast.LENGTH_SHORT).show()
             todoPopup.dismiss()
         }
     }
