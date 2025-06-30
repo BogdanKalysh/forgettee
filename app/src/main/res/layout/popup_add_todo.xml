@@ -82,6 +82,7 @@
         android:contentDescription="@string/delete_todo_item"
         android:layout_marginEnd="@dimen/size_24_dp"
         android:layout_marginStart="-16dp"
+        app:tint="@color/theme_red"
         app:layout_constraintStart_toEndOf="@id/btn_add_or_save_todo"
         app:layout_constraintTop_toTopOf="@id/btn_add_or_save_todo"
         app:layout_constraintBottom_toBottomOf="@id/btn_add_or_save_todo"
