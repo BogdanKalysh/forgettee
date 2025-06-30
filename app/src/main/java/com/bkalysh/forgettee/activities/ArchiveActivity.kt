@@ -1,6 +1,7 @@
 package com.bkalysh.forgettee.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -42,6 +43,11 @@ class ArchiveActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.doneTasks.collect { todoItems ->
                     toDoArchiveItemsAdapter.archiveItems = generateUiItems(todoItems, this@ArchiveActivity)
+                    if (todoItems.isEmpty()) {
+                        binding.containerEmptyListPlaceholder.visibility = View.VISIBLE
+                    } else {
+                        binding.containerEmptyListPlaceholder.visibility = View.GONE
+                    }
                 }
             }
         }

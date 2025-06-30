@@ -18,6 +18,10 @@
     <string name="edit">Редагувати</string>
     <string name="complete">Завершити</string>
     <string name="archive">Архів</string>
+    <string name="no_tasks">Немає завдань</string>
+    <string name="placeholder_main_description">Натисніть кнопку +\nщоб додати завдання</string>
+    <string name="empty">Пусто</string>
+    <string name="placeholder_archive_description">Немає завершених\nзавдань в архіві</string>
     <string name="deleted_toast_text">Видалено: %1$s</string>
 
     <!--  Placeholders for textview  -->

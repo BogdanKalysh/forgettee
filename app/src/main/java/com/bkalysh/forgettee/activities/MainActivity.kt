@@ -71,6 +71,11 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.activeTasks.collect { todoItems ->
                     toDoItemsAdapter.todoItems = todoItems
+                    if (todoItems.isEmpty()) {
+                        binding.containerEmptyListPlaceholder.visibility = View.VISIBLE
+                    } else {
+                        binding.containerEmptyListPlaceholder.visibility = View.GONE
+                    }
                 }
             }
         }

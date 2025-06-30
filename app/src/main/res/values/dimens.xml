@@ -29,4 +29,6 @@
     <dimen name="day_separator_text_size">12sp</dimen>
     <dimen name="archive_todo_item_text_size">12sp</dimen>
     <dimen name="day_count_chip_text_size">10sp</dimen>
+    <dimen name="placeholder_title_text_size">16sp</dimen>
+    <dimen name="placeholder_description_text_size">16sp</dimen>
 </resources>
