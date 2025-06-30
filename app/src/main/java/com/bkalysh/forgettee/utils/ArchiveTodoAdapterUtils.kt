@@ -54,6 +54,8 @@ object ArchiveTodoAdapterUtils {
         val calendar = Calendar.getInstance()
         calendar.time = date
 
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
         val weekStart = calendar.clone() as Calendar
         weekStart.set(Calendar.DAY_OF_WEEK, weekStart.firstDayOfWeek)
 
@@ -64,8 +66,12 @@ object ArchiveTodoAdapterUtils {
         val weekStartStr = formatter.format(weekStart.time)
         val weekEndStr = formatter.format(weekEnd.time)
 
-        return context.getString(R.string.week_range, weekStartStr, weekEndStr)
+        val weekEndYear = weekEnd.get(Calendar.YEAR)
+        val yearSuffix = if (weekEndYear < currentYear) ", $weekEndYear" else ""
+
+        return context.getString(R.string.week_range, weekStartStr, weekEndStr, yearSuffix)
     }
+
 
     private fun formatDay(date: Date): String {
         val calendar = Calendar.getInstance()

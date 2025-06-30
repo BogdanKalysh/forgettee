@@ -17,7 +17,7 @@
     <string name="edit">Edit</string>
     <string name="complete">Complete</string>
     <string name="archive">Archive</string>
-    <string name="week_range" translatable="false">%1$s – %2$s</string>
+    <string name="week_range" translatable="false">%1$s – %2$s%3$s</string>
 
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">What will you do?</string>
