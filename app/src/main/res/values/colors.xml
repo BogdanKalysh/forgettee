@@ -2,8 +2,8 @@
 <resources>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="black_semi_transparent">#65000000</color>
-    <color name="white_semi_transparent">#65FFFFFF</color>
+    <color name="black_semi_transparent_10">#1A000000</color>
+    <color name="white_semi_transparent_10">#1AFFFFFF</color>
 
     <color name="theme_red">#EE6A5E</color>
     <color name="theme_red_translucent">#80ED695C</color>

@@ -11,6 +11,8 @@
         <item name="colorSecondaryVariant">@color/gray_87</item>
         <item name="colorOnSecondaryFixedVariant">@color/gray_50</item>
 
+        <item name="colorSurface">@color/black_semi_transparent_10</item>
+
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>
     <style name="Theme.Forgettee" parent="Base.Theme.Forgettee" />

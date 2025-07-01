@@ -238,4 +238,18 @@ class TodoItemTouchHelperCallback(
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
+
+    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+        super.onSelectedChanged(viewHolder, actionState)
+        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+            val context = viewHolder?.itemView?.context ?: return
+            val drawable = ContextCompat.getDrawable(context, R.drawable.todo_item_hover_foreground)
+            viewHolder.itemView.foreground = drawable
+        }
+    }
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+        viewHolder.itemView.foreground = null
+    }
 }
