@@ -10,7 +10,6 @@
     <string name="add_button">Add</string>
     <string name="save_button">Save</string>
     <string name="delete_all">Delete all</string>
-    <string name="archive_descriptor">Task archive</string>
     <string name="change_theme">Change theme</string>
     <string name="delete_archive_item_button">delete archive item</string>
 

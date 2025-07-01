@@ -56,7 +56,7 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
                 holder.bindData(archiveItem.text)
             }
             holder is DaySeparatorViewHolder && archiveItem is UiItem.DaySeparator -> {
-                holder.bindData(archiveItem.text)
+                holder.bindData(archiveItem.date, archiveItem.weekDay)
             }
         }
     }
@@ -83,9 +83,10 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
         }
     }
     inner class DaySeparatorViewHolder(private val binding: ItemArchiveDaySeparatorBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindData(dayHeader: String) {
+        fun bindData(dayHeader: String, weekDayHeader: String) {
             binding.apply {
-                tvDaySeparator.text = dayHeader
+                tvDate.text = dayHeader
+                tvWeekday.text = weekDayHeader
             }
         }
     }
@@ -94,8 +95,8 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
         override fun areItemsTheSame(oldItem: UiItem, newItem: UiItem): Boolean {
             return when {
                 oldItem is UiItem.ToDo && newItem is UiItem.ToDo -> oldItem.item.id == newItem.item.id
-                oldItem is UiItem.WeekSeparator && newItem is UiItem.WeekSeparator -> oldItem.text == newItem.text
-                oldItem is UiItem.DaySeparator && newItem is UiItem.DaySeparator -> oldItem.text == newItem.text
+                oldItem is UiItem.WeekSeparator && newItem is UiItem.WeekSeparator -> oldItem == newItem
+                oldItem is UiItem.DaySeparator && newItem is UiItem.DaySeparator -> oldItem == newItem
                 else -> false
             }
         }
@@ -113,7 +114,7 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
     sealed class UiItem {
         data class ToDo(val item: ToDoItem) : UiItem()
         data class WeekSeparator(val text: String) : UiItem()
-        data class DaySeparator(val text: String) : UiItem()
+        data class DaySeparator(val date: String, val weekDay: String) : UiItem()
     }
 
     private companion object {

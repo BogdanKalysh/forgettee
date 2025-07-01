@@ -46,8 +46,9 @@
                 android:gravity="center"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/day_count_chip_text_size"
-                android:layout_width="@dimen/time_chip_size"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="@dimen/time_chip_size"
                 android:layout_gravity="center"/>
         </FrameLayout>
 

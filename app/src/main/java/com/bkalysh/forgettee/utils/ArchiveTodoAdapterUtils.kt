@@ -25,7 +25,8 @@ object ArchiveTodoAdapterUtils {
 
             groupedByDay.values.forEach { itemsInDay ->
                 val dayLabel = formatDay(itemsInDay.first().doneAt)
-                uiItems.add(UiItem.DaySeparator(dayLabel))
+                val weekDayLabel = formatWeekDay(itemsInDay.first().doneAt)
+                uiItems.add(UiItem.DaySeparator(dayLabel, weekDayLabel))
 
                 uiItems.addAll(itemsInDay.map { UiItem.ToDo(it) })
             }
@@ -81,7 +82,14 @@ object ArchiveTodoAdapterUtils {
     private fun formatDay(date: Date): String {
         val calendar = Calendar.getInstance()
         calendar.time = date
-        val formatter = SimpleDateFormat("d MMM", Locale.getDefault())
+        val formatter = SimpleDateFormat("d MMMM", Locale.getDefault())
+        return formatter.format(calendar.time)
+    }
+
+    private fun formatWeekDay(date: Date): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        val formatter = SimpleDateFormat("EEEE", Locale.getDefault())
         return formatter.format(calendar.time)
     }
 }

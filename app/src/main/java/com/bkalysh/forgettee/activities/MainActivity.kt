@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
         todoPopupBinding.btnAddOrSaveTodo.text = getString(R.string.save_button)
         todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
             vibrate(this@MainActivity)
-            val updatedTodoText = todoPopupBinding.etTodoText.text.toString()
+            val updatedTodoText = todoPopupBinding.etTodoText.text.toString().trim()
             if (updatedTodoText.isNotEmpty()) {
                 itemSwipeHelperCallback.unBlockSwipe() //unblocking the swipe after updating item
                 val updatedTodo = toDoItem.copy(text = updatedTodoText)
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupAddTodoItemButton() {
         todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
             vibrate(this@MainActivity)
-            val todoText = todoPopupBinding.etTodoText.text.toString()
+            val todoText = todoPopupBinding.etTodoText.text.toString().trim()
 
             if (todoText.isNotEmpty()) {
                 val newTodoItem = parseTodoItemFromInput(todoText, 0)
@@ -233,8 +233,9 @@ class MainActivity : AppCompatActivity() {
 
     private var isWarningAnimatingClose = false
     private fun setupTodoEdittext() {
-        todoPopupBinding.etTodoText.doOnTextChanged { _,_,_,_ ->
-            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isWarningAnimatingClose) {
+        todoPopupBinding.etTodoText.doOnTextChanged { text,_,_,_ ->
+            val textStr = text.toString().trim()
+            if (todoPopupBinding.textviewEmptyWarning.isVisible && !isWarningAnimatingClose && textStr.isNotEmpty()) {
                 isWarningAnimatingClose = true
                 val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_down)
                 todoPopupBinding.textviewEmptyWarning.startAnimation(animation)

@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_8_dp">
+        android:layout_marginTop="@dimen/size_16_dp">
         <FrameLayout
             android:id="@+id/line_week_separator_left"
             android:layout_width="0dp"
