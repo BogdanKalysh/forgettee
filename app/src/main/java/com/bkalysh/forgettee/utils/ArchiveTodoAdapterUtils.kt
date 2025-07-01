@@ -8,8 +8,6 @@ import com.bkalysh.forgettee.database.models.ToDoItem
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
-import kotlin.math.max
 
 object ArchiveTodoAdapterUtils {
     fun generateUiItems(toDoItems: List<ToDoItem>, context: Context): List<UiItem> {
@@ -36,16 +34,9 @@ object ArchiveTodoAdapterUtils {
         return uiItems
     }
 
-    fun formatCompleteTimePeriod(dateCreated: Date, dateCompleted: Date, context: Context): String {
-        val diffMillis = dateCompleted.time - dateCreated.time
-        val diffHours = max(TimeUnit.MILLISECONDS.toHours(diffMillis), 1L) // at least 1 hour
-        val diffDays = TimeUnit.MILLISECONDS.toDays(diffMillis).toInt()
-
-        return if (diffHours < 24) {
-            context.resources.getQuantityString(R.plurals.hour_count, diffHours.toInt(), diffHours.toInt())
-        } else {
-            context.resources.getQuantityString(R.plurals.day_count, diffDays, diffDays)
-        }
+    fun formatCompleteTime(dateCompleted: Date): String {
+        val format = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return format.format(dateCompleted)
     }
 
     private fun getWeekKey(date: Date): String {

@@ -9,7 +9,7 @@ import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ItemArchiveDaySeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchiveWeekSeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchivedTodoBinding
-import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.formatCompleteTimePeriod
+import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.formatCompleteTime
 
 class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDeleteTodoListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var archiveItems: List<UiItem>
@@ -66,8 +66,8 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
             binding.apply {
                 // Display task text
                 tvTaskText.text = toDoItem.text
-                // Display time it took to complete the task
-                tvDayCount.text = formatCompleteTimePeriod(toDoItem.createdAt, toDoItem.doneAt, itemView.context)
+                // Display completion time
+                tvCompletionTime.text = formatCompleteTime(toDoItem.doneAt)
                 // Setting up delete item button
                 btnDeleteItem.setOnClickListener {
                     onDeleteListener.onTodoDelete(toDoItem)
