@@ -26,11 +26,11 @@ class TodoItemTouchHelperCallback(
     private val context: Context) : ItemTouchHelper.Callback() {
 
     private val redPaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.theme_red_translucent)
+        color = ContextCompat.getColor(context, R.color.theme_red_translucent_50)
         isAntiAlias = true
     }
     private val bluePaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.accent_blue_translucent)
+        color = ContextCompat.getColor(context, R.color.accent_blue_translucent_50)
         isAntiAlias = true
     }
     private val textPaint = Paint().apply {
