@@ -33,7 +33,7 @@
 
     <!--  Tutorial tasks  -->
     <string name="tutorial_task_finish">1. Click me to mark the task done</string>
-    <string name="tutorial_task_edit">2. Swipe me to edit the task</string>
-    <string name="tutorial_task_delete">3. Swipe me to complete the task</string>
+    <string name="tutorial_task_edit">2. Swipe me left to edit the task</string>
+    <string name="tutorial_task_delete">3. Swipe me right to complete the task</string>
     <string name="tutorial_task_reorder">4. Click and hold me to reorder</string>
 </resources>

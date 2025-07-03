@@ -31,7 +31,7 @@
 
     <!--  Tutorial tasks  -->
     <string name="tutorial_task_finish">1. Натисни мене, щоб виконати завдання</string>
-    <string name="tutorial_task_edit">2. Свайпни мене, щоб редагувати завдання</string>
-    <string name="tutorial_task_delete">3. Свайпни мене, щоб завершити завдання</string>
+    <string name="tutorial_task_edit">2. Свайпни мене ліворуч, щоб редагувати завдання</string>
+    <string name="tutorial_task_delete">3. Свайпни мене праворуч, щоб завершити завдання</string>
     <string name="tutorial_task_reorder">4. Натисни і тримай мене, щоб перемістити</string>
 </resources>
