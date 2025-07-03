@@ -71,7 +71,10 @@ class TodoItemTouchHelperCallback(
         val position = viewHolder.adapterPosition
         val item = toDoItemsAdapter.todoItems[position]
         toDoItemsAdapter.todoItems = toDoItemsAdapter.todoItems.toMutableList().apply { removeAt(position) }
-        toDoItemsAdapter.onItemSwiped(item)
+        when (direction) {
+            ItemTouchHelper.RIGHT -> toDoItemsAdapter.onItemSwipedRight(item)
+            ItemTouchHelper.LEFT -> toDoItemsAdapter.onItemSwipedLeft(item)
+        }
         circleStates[position]?.apply {
             removed = true // for animation
         }
@@ -86,15 +89,31 @@ class TodoItemTouchHelperCallback(
         viewHolder: RecyclerView.ViewHolder
     ): Int {
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-        val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
+
+        val toDoItem = toDoItemsAdapter.todoItems.getOrNull(viewHolder.adapterPosition)
+        val swipeFlags = ItemTouchHelper.LEFT or
+                if (toDoItem != null && toDoItem.isDone) {
+                    ItemTouchHelper.RIGHT
+                } else {
+                    0
+                }
         return makeMovementFlags(dragFlags, if (isSwipeBlocked) 0 else swipeFlags)
     }
 
     override fun isLongPressDragEnabled(): Boolean = true
 
+    // a map of animation states to be able to draw two animations
+    // simultaneously if two items are swiped quickly
     private val circleStates = mutableMapOf<Int, CircleState>()
+
+    // Flag which shows if we need to seek for passing the threshold
+    // value for vibration
     private var seekForward = true
-    private var isRightSwipe = false
+
+    // Flag which shows if animation was expanded to opposite direction
+    // in case of quick swipe direction change. To not draw a fully
+    // expanded animation on the opposite side
+    private var isRightSwipeExpanded = false
 
     override fun onChildDraw(
         c: Canvas,
@@ -156,7 +175,7 @@ class TodoItemTouchHelperCallback(
         }
 
         // handling quick swipe direction change after expand
-        if (swipeProgress < 0.5f && (isRightSwipe != dX > 0)) {
+        if (swipeProgress < 0.5f && (isRightSwipeExpanded != dX > 0)) {
             circleState.reset()
         }
 
@@ -167,8 +186,8 @@ class TodoItemTouchHelperCallback(
         }
 
         if (swipeProgress > 0.5f && !circleState.expanded && !circleState.animating) {
-            isRightSwipe = dX > 0
-            currentPaint = if (toDoItemsAdapter.todoItems[animationPosition].isDone) {
+            isRightSwipeExpanded = dX > 0
+            currentPaint = if (dX > 0) {
                 redPaint
             } else {
                 bluePaint
@@ -215,7 +234,7 @@ class TodoItemTouchHelperCallback(
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && abs(dX) > 0) {
             val textCenterY = itemView.top + itemView.height / 2f + textPaint.textSize / 3
 
-            val text = if (toDoItemsAdapter.todoItems[animationPosition].isDone) {
+            val text = if (dX > 0) {
                 context.getString(R.string.complete)
             } else {
                 context.getString(R.string.edit)

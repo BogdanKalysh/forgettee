@@ -79,8 +79,12 @@ class TodoItemsRecyclerViewAdapter(
         }
     }
 
-    fun onItemSwiped(toDoItem: ToDoItem) {
-        swipeListener.onItemSwiped(toDoItem)
+    fun onItemSwipedRight(toDoItem: ToDoItem) {
+        swipeListener.onItemSwipedRight(toDoItem)
+    }
+
+    fun onItemSwipedLeft(toDoItem: ToDoItem) {
+        swipeListener.onItemSwipedLeft(toDoItem)
     }
 
     inner class TodoViewHolder(val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root)
@@ -90,7 +94,8 @@ class TodoItemsRecyclerViewAdapter(
     }
 
     interface OnItemSwipedListener {
-        fun onItemSwiped(toDoItem: ToDoItem)
+        fun onItemSwipedRight(toDoItem: ToDoItem)
+        fun onItemSwipedLeft(toDoItem: ToDoItem)
     }
 
     interface OnReorderListener {

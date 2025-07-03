@@ -98,14 +98,13 @@ class MainActivity : AppCompatActivity() {
                 }
             },
             object : TodoItemsRecyclerViewAdapter.OnItemSwipedListener {
-                override fun onItemSwiped(toDoItem: ToDoItem) {
-                    if (toDoItem.isDone) {
-                        val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
-                        viewModel.updateTodoItem(updatedItem)
-                    } else {
-                        itemSwipeHelperCallback.blockSwipe()
-                        openEditTodoPopup(toDoItem)
-                    }
+                override fun onItemSwipedRight(toDoItem: ToDoItem) {
+                    val updatedItem = toDoItem.copy(isRemoved = true, doneAt = Date())
+                    viewModel.updateTodoItem(updatedItem)
+                }
+                override fun onItemSwipedLeft(toDoItem: ToDoItem) {
+                    itemSwipeHelperCallback.blockSwipe()
+                    openEditTodoPopup(toDoItem)
                 }
             },
             object : TodoItemsRecyclerViewAdapter.OnReorderListener {
