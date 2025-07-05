@@ -25,6 +25,9 @@ interface ToDoItemDao {
     @Query("SELECT * FROM todo_items WHERE is_removed = 1 ORDER BY done_at DESC")
     fun getAllDone(): Flow<List<ToDoItem>>
 
+    @Query("SELECT * FROM todo_items WHERE is_removed = 1 AND text LIKE '%' || :filter || '%' ORDER BY done_at DESC")
+    fun getAllDoneFiltered(filter: String): Flow<List<ToDoItem>>
+
     @Delete
     suspend fun delete(item: ToDoItem)
 }

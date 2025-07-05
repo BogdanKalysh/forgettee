@@ -21,12 +21,14 @@
     <string name="placeholder_main_description">Press the + button\nto add a task</string>
     <string name="empty">Empty</string>
     <string name="placeholder_archive_description">There are no completed\ntasks in archive</string>
+    <string name="placeholder_search_archive_description">There are no completed\ntasks for your request</string>
     <string name="deleted_toast_text">Deleted: %1$s</string>
     <string name="week_range" translatable="false">%1$s – %2$s%3$s</string>
 
 
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">What will you do?</string>
+    <string name="search">Search</string>
 
     <!--  Toast messages  -->
     <string name="enter_todo_task_description">*Enter todo task description</string>

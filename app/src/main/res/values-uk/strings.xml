@@ -18,16 +18,18 @@
     <string name="complete">Завершити</string>
     <string name="archive">Архів</string>
     <string name="no_tasks">Немає завдань</string>
-    <string name="placeholder_main_description">Натисніть кнопку +\nщоб додати завдання</string>
+    <string name="placeholder_main_description">Натисни кнопку +\nщоб додати завдання</string>
     <string name="empty">Пусто</string>
     <string name="placeholder_archive_description">Немає завершених\nзавдань в архіві</string>
+    <string name="placeholder_search_archive_description">За твоїм запитом немає\nзавершених завдань</string>
     <string name="deleted_toast_text">Видалено: %1$s</string>
 
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">Що зробиш?</string>
+    <string name="search">Пошук</string>
 
     <!--  Toast messages  -->
-    <string name="enter_todo_task_description">*Введіть опис завдання</string>
+    <string name="enter_todo_task_description">*Введи опис завдання</string>
 
     <!--  Tutorial tasks  -->
     <string name="tutorial_task_finish">1. Натисни мене, щоб виконати завдання</string>

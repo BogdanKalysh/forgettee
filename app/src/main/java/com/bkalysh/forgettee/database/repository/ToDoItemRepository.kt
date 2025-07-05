@@ -21,6 +21,10 @@ class ToDoItemRepository(private val dao: ToDoItemDao) {
         return dao.getAllDone()
     }
 
+    fun getAllDoneFiltered(filter: String): Flow<List<ToDoItem>> {
+        return dao.getAllDoneFiltered(filter)
+    }
+
     suspend fun delete(item: ToDoItem) {
         dao.delete(item)
     }

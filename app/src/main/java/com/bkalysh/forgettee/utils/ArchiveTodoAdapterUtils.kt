@@ -10,7 +10,7 @@ import java.util.Date
 import java.util.Locale
 
 object ArchiveTodoAdapterUtils {
-    fun generateUiItems(toDoItems: List<ToDoItem>, context: Context): List<UiItem> {
+    fun generateUiItems(toDoItems: List<ToDoItem>, withWeekSeparator: Boolean, context: Context): List<UiItem> {
         val groupedByWeek = toDoItems
             .sortedByDescending { it.doneAt }
             .groupBy { getWeekKey(it.doneAt) }
@@ -18,8 +18,10 @@ object ArchiveTodoAdapterUtils {
         val uiItems = mutableListOf<UiItem>()
 
         groupedByWeek.values.forEach { itemsInWeek ->
-            val weekLabel = formatWeekRange(itemsInWeek.first().doneAt, context)
-            uiItems.add(UiItem.WeekSeparator(weekLabel))
+            if (withWeekSeparator) {
+                val weekLabel = formatWeekRange(itemsInWeek.first().doneAt, context)
+                uiItems.add(UiItem.WeekSeparator(weekLabel))
+            }
 
             val groupedByDay = itemsInWeek.groupBy { getDayKey(it.doneAt) }
 
