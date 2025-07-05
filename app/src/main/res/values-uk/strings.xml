@@ -18,7 +18,7 @@
     <string name="complete">Завершити</string>
     <string name="archive">Архів</string>
     <string name="no_tasks">Немає завдань</string>
-    <string name="placeholder_main_description">Натисни кнопку +\nщоб додати завдання</string>
+    <string name="placeholder_main_description">Натисни кнопку + щоб\nдодати завдання</string>
     <string name="empty">Пусто</string>
     <string name="placeholder_archive_description">Немає завершених\nзавдань в архіві</string>
     <string name="placeholder_search_archive_description">За твоїм запитом немає\nзавершених завдань</string>

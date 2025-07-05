@@ -18,7 +18,7 @@
     <string name="complete">Complete</string>
     <string name="archive">Archive</string>
     <string name="no_tasks">No tasks</string>
-    <string name="placeholder_main_description">Press the + button\nto add a task</string>
+    <string name="placeholder_main_description">Press the + button to\nadd a task</string>
     <string name="empty">Empty</string>
     <string name="placeholder_archive_description">There are no completed\ntasks in archive</string>
     <string name="placeholder_search_archive_description">There are no completed\ntasks for your request</string>
