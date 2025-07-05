@@ -38,6 +38,7 @@ import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Date
 import androidx.core.content.edit
+import androidx.core.view.WindowCompat
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_DB_PREPOPULATED_ITEM
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_SETTINGS_NAME
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_THEME_MODE_ITEM
@@ -305,6 +306,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openMenu() {
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
         binding.dimmer.visibility = View.VISIBLE
         val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_down)
         binding.clMenu.startAnimation(animation)
@@ -312,6 +314,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun closeAllPopups() {
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !isDarkTheme(this)
         binding.dimmer.visibility = View.INVISIBLE
         val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_up)
         binding.clMenu.startAnimation(animation)
