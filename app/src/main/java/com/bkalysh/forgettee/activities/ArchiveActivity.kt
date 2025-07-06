@@ -1,7 +1,9 @@
 package com.bkalysh.forgettee.activities
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -54,12 +56,12 @@ class ArchiveActivity : AppCompatActivity() {
 
     private fun setupTodoArchiveRecyclerViewAdapter() {
         toDoArchiveItemsAdapter = ArchiveTodoItemsRecyclerViewAdapter(
-            object : ArchiveTodoItemsRecyclerViewAdapter.OnDeleteTodoListener {
-                override fun onTodoDelete(toDoItem: ToDoItem) {
+            object : ArchiveTodoItemsRecyclerViewAdapter.OnTodoClickListener {
+                override fun onTodoClicked(toDoItem: ToDoItem, x: Float, y: Float) {
                     vibrate(this@ArchiveActivity)
-                    viewModel.deleteTodoItem(toDoItem)
+                    showTodoItemContextMenu(toDoItem, x, y)
                 }
-            },
+            }
         )
         binding.rvTodoArchiveList.apply {
             adapter = toDoArchiveItemsAdapter
@@ -99,14 +101,16 @@ class ArchiveActivity : AppCompatActivity() {
                 viewModel.archiveMode.collect { archiveMode ->
                     when (archiveMode) {
                         ArchiveActivityMode.SEARCH_MODE -> {
-                            binding.btnSearch.setImageResource(R.drawable.icn_close)
+                            binding.btnCloseSearch.visibility = View.VISIBLE
+                            binding.btnSearch.visibility = View.GONE
                             binding.tvActivityName.visibility = View.GONE
                             binding.btnBack.visibility = View.GONE
                             binding.etSearch.visibility = View.VISIBLE
                             focusOnEditText(binding.etSearch)
                         }
                         ArchiveActivityMode.FULL_ARCHIVE_MODE -> {
-                            binding.btnSearch.setImageResource(R.drawable.icn_search)
+                            binding.btnCloseSearch.visibility = View.GONE
+                            binding.btnSearch.visibility = View.VISIBLE
                             binding.tvActivityName.visibility = View.VISIBLE
                             binding.btnBack.visibility = View.VISIBLE
                             binding.etSearch.visibility = View.GONE
@@ -120,13 +124,14 @@ class ArchiveActivity : AppCompatActivity() {
     }
 
     private fun setupSearch() {
+        binding.btnCloseSearch.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.archiveMode.value = ArchiveActivityMode.FULL_ARCHIVE_MODE
+            }
+        }
         binding.btnSearch.setOnClickListener {
             lifecycleScope.launch {
-                viewModel.archiveMode.value =
-                    when (viewModel.archiveMode.value) {
-                        ArchiveActivityMode.FULL_ARCHIVE_MODE -> ArchiveActivityMode.SEARCH_MODE
-                        ArchiveActivityMode.SEARCH_MODE -> ArchiveActivityMode.FULL_ARCHIVE_MODE
-                    }
+                viewModel.archiveMode.value = ArchiveActivityMode.SEARCH_MODE
             }
         }
         binding.etSearch.doOnTextChanged { searchFilter,_,_,_ ->
@@ -150,5 +155,19 @@ class ArchiveActivity : AppCompatActivity() {
     private fun shouldDisplayWeekSeparator(): Boolean{
         return viewModel.archiveMode.value == ArchiveActivityMode.FULL_ARCHIVE_MODE ||
                 viewModel.archiveSearchFilter.value.trim().isEmpty()
+    }
+
+
+    private fun showTodoItemContextMenu(toDoItem: ToDoItem, xCord: Float, yCord: Float) {
+        val blackOverlay = View(this).apply { // TMP just for visualization
+            setBackgroundColor(Color.BLACK)
+            alpha = 0.5f
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        (findViewById<ViewGroup>(android.R.id.content)).addView(blackOverlay)
     }
 }

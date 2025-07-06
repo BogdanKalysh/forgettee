@@ -63,13 +63,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_search"/>
+            app:layout_constraintEnd_toStartOf="@id/btn_close_search"/>
 
         <ImageButton
-            android:id="@+id/btn_search"
+            android:id="@+id/btn_close_search"
             android:layout_width="@dimen/size_48_dp"
             android:layout_height="@dimen/size_48_dp"
-            android:src="@drawable/icn_search"
+            android:src="@drawable/icn_close"
             android:background="@drawable/image_button_ripple"
             android:contentDescription="@string/menu"
 
@@ -125,4 +125,17 @@
             app:layout_constraintTop_toBottomOf="@id/tv_placeholder_title"
             android:layout_marginTop="@dimen/size_8_dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="@dimen/size_64_dp"
+        android:layout_height="@dimen/size_64_dp"
+        android:src="@drawable/icn_search"
+        android:background="@drawable/image_button_ripple"
+        android:contentDescription="@string/add_todo_item"
+
+        android:layout_margin="@dimen/size_24_dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

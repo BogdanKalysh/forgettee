@@ -11,7 +11,7 @@ import com.bkalysh.forgettee.databinding.ItemArchiveWeekSeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchivedTodoBinding
 import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.formatCompleteTime
 
-class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDeleteTodoListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveTodoItemsRecyclerViewAdapter(private val onTodoClickListener: OnTodoClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var archiveItems: List<UiItem>
         get() = differ.currentList
         set(value) { differ.submitList(value) }
@@ -68,9 +68,11 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
                 tvTaskText.text = toDoItem.text
                 // Display completion time
                 tvCompletionTime.text = formatCompleteTime(toDoItem.doneAt)
-                // Setting up delete item button
-                btnDeleteItem.setOnClickListener {
-                    onDeleteListener.onTodoDelete(toDoItem)
+                // Setting up listener to open context menu for item
+                root.setOnClickListener { view ->
+                    val location = IntArray(2)
+                    view.getLocationOnScreen(location)
+                    onTodoClickListener.onTodoClicked(toDoItem, location[0].toFloat(), location[1].toFloat())
                 }
             }
         }
@@ -107,8 +109,8 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onDeleteListener: OnDelete
     }
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    interface OnDeleteTodoListener {
-        fun onTodoDelete(toDoItem: ToDoItem)
+    interface OnTodoClickListener {
+        fun onTodoClicked(toDoItem: ToDoItem, x: Float, y: Float)
     }
 
     sealed class UiItem {
