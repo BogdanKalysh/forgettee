@@ -30,7 +30,7 @@
         android:id="@+id/container_completion_time"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/size_24_dp"
-        android:background="@drawable/chip_days_background"
+        android:background="@drawable/chip_gray_background"
         android:paddingHorizontal="@dimen/size_8_dp"
         android:layout_marginEnd="@dimen/size_8_dp"
         app:layout_constraintTop_toTopOf="parent"

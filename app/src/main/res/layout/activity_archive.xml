@@ -95,7 +95,7 @@
                 android:id="@+id/container_current_date_number"
                 android:layout_width="@dimen/size_24_dp"
                 android:layout_height="@dimen/size_24_dp"
-                android:background="@drawable/chip_weekday_background"
+                android:background="@drawable/chip_red_background"
                 android:layout_marginEnd="@dimen/size_6_dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
