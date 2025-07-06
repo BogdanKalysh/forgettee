@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class) // for using flatMapLatest
@@ -28,7 +29,13 @@ class ArchiveViewModel(private val repository: ToDoItemRepository): ViewModel() 
             }.flatMapLatest { (mode, filter) ->
                 when (mode) {
                     ArchiveActivityMode.FULL_ARCHIVE_MODE -> repository.getAllDone()
-                    ArchiveActivityMode.SEARCH_MODE -> repository.getAllDoneFiltered(filter)
+                    ArchiveActivityMode.SEARCH_MODE -> {
+                        if (filter.isBlank()) {
+                            flowOf(emptyList())
+                        } else {
+                            repository.getAllDoneFiltered(filter)
+                        }
+                    }
                 }
             }.collect { tasks ->
                 _doneTasks.value = tasks
