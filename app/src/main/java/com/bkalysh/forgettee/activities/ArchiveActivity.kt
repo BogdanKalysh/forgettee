@@ -34,6 +34,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.core.view.isVisible
 
 class ArchiveActivity : AppCompatActivity() {
     private val viewModel: ArchiveViewModel by viewModel()
@@ -159,7 +160,9 @@ class ArchiveActivity : AppCompatActivity() {
 
     private fun setupBackPressedObserver() {
         onBackPressedDispatcher.addCallback(this) {
-            if (viewModel.archiveMode.value == ArchiveActivityMode.SEARCH_MODE) {
+            if (binding.dimmer.isVisible) {
+                closeAllPopups()
+            } else if (viewModel.archiveMode.value == ArchiveActivityMode.SEARCH_MODE) {
                 viewModel.archiveMode.value = ArchiveActivityMode.FULL_ARCHIVE_MODE
             } else {
                 isEnabled = false

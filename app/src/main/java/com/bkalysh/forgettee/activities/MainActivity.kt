@@ -7,6 +7,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         setupDimmer()
         prepopulateDbIfNeeded()
         setFirstLetterRed(binding.tvAppName)
+        setupBackPressedObserver()
     }
 
     private fun setupTodoRecyclerViewAdapter() {
@@ -278,6 +280,17 @@ class MainActivity : AppCompatActivity() {
                 }
             AppCompatDelegate.setDefaultNightMode(newThemeMode)
             sharedPref.edit { putInt(SHARED_PREFERENCES_THEME_MODE_ITEM, newThemeMode) }
+        }
+    }
+
+    private fun setupBackPressedObserver() {
+        onBackPressedDispatcher.addCallback(this) {
+            if (binding.dimmer.isVisible) {
+                closeAllPopups()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
