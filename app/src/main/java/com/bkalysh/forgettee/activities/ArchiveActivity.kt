@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 
 class ArchiveActivity : AppCompatActivity() {
     private val viewModel: ArchiveViewModel by viewModel()
@@ -82,6 +83,38 @@ class ArchiveActivity : AppCompatActivity() {
             adapter = toDoArchiveItemsAdapter
             layoutManager = LinearLayoutManager(this@ArchiveActivity)
         }
+
+        // Dynamic search button hiding/showing on scroll
+        var isSearchButtonAnimationRunning = false
+        var isSearchButtonHidden = false
+        binding.rvTodoArchiveList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (isSearchButtonAnimationRunning) return
+
+                if (dy > 0 && !isSearchButtonHidden) {
+                    binding.btnSearch.animate()
+                        .translationY(binding.btnSearch.height.toFloat() + 100)
+                        .setDuration(300)
+                        .withEndAction {
+                            isSearchButtonAnimationRunning = false
+                        }
+                        .start()
+                    isSearchButtonHidden = true
+                    isSearchButtonAnimationRunning = true
+                } else if (dy < 0 && isSearchButtonHidden) {
+                    binding.btnSearch.animate()
+                        .translationY(0f)
+                        .setDuration(300)
+                        .withEndAction { isSearchButtonAnimationRunning = false }
+                        .start()
+                    isSearchButtonHidden = false
+                    isSearchButtonAnimationRunning = true
+                }
+
+            }
+        })
     }
 
     private fun setupArchiveItemsObserving() {
