@@ -231,6 +231,7 @@ class ArchiveActivity : AppCompatActivity() {
 
     private fun showTodoItemContextMenu(toDoItem: ToDoItem, yCord: Float, buttonHeight: Float) {
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
+        hideKeyboard(binding.etSearch)
 
         // calculating display coordinates
         val screenHeight = Resources.getSystem().displayMetrics.heightPixels
