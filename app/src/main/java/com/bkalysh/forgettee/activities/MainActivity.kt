@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        setupAppTheme()
         setupTodoRecyclerViewAdapter()
         setupAddTodoPopupButton()
         setupMenu()
@@ -156,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             openMenu()
         }
         setupArchiveButton()
-        setupDarkThemeButton()
+        setupSettingsButton()
     }
 
     private fun openAddTodoPopup() {
@@ -267,20 +268,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDarkThemeButton() {
+    private fun setupSettingsButton() {
+        binding.btnSettings.setOnClickListener {
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(settingsIntent)
+            closeAllPopups()
+        }
+
+//        binding.tvChangeTheme.setOnClickListener {
+//            val newThemeMode =
+//                if (isDarkTheme(this)) {
+//                    AppCompatDelegate.MODE_NIGHT_NO
+//                } else {
+//                    AppCompatDelegate.MODE_NIGHT_YES
+//                }
+//            AppCompatDelegate.setDefaultNightMode(newThemeMode)
+//            sharedPref.edit { putInt(SHARED_PREFERENCES_THEME_MODE_ITEM, newThemeMode) }
+//        }
+    }
+
+    private fun setupAppTheme() {
         val themeMode = sharedPref.getInt(SHARED_PREFERENCES_THEME_MODE_ITEM, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         AppCompatDelegate.setDefaultNightMode(themeMode)
-
-        binding.tvChangeTheme.setOnClickListener {
-            val newThemeMode =
-                if (isDarkTheme(this)) {
-                    AppCompatDelegate.MODE_NIGHT_NO
-                } else {
-                    AppCompatDelegate.MODE_NIGHT_YES
-                }
-            AppCompatDelegate.setDefaultNightMode(newThemeMode)
-            sharedPref.edit { putInt(SHARED_PREFERENCES_THEME_MODE_ITEM, newThemeMode) }
-        }
     }
 
     private fun setupBackPressedObserver() {

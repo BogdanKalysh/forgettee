@@ -19,6 +19,7 @@
     <string name="edit">Редагувати</string>
     <string name="complete">Завершити</string>
     <string name="archive">Архів</string>
+    <string name="settings">Налаштування</string>
     <string name="no_tasks">Немає завдань</string>
     <string name="placeholder_main_description">Натисни кнопку + щоб\nдодати завдання</string>
     <string name="empty">Пусто</string>
