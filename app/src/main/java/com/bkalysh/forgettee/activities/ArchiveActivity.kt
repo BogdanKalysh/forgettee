@@ -43,7 +43,7 @@ class ArchiveActivity : AppCompatActivity() {
         binding = ActivityArchiveBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             // applying insets via custom spacers, so the dimmer can cover the whole screen
             val topLP = binding.flTopSpacer.layoutParams
