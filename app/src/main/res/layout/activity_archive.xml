@@ -47,7 +47,6 @@
             android:textSize="@dimen/toolbar_header_size"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="?attr/colorOnPrimary"
-            android:visibility="gone"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,6 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/size_16_dp"
+            android:visibility="invisible"
 
             android:autofillHints="Input your todo task"
             android:textSize="@dimen/edit_todo_text_size"
@@ -80,6 +80,7 @@
             android:id="@+id/btn_close_search"
             android:layout_width="@dimen/size_48_dp"
             android:layout_height="@dimen/size_48_dp"
+            android:visibility="invisible"
             android:src="@drawable/icn_close"
             android:background="@drawable/image_button_ripple"
             android:contentDescription="@string/menu"
@@ -87,6 +88,45 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_current_date_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <FrameLayout
+                android:id="@+id/container_current_date_number"
+                android:layout_width="@dimen/size_24_dp"
+                android:layout_height="@dimen/size_24_dp"
+                android:background="@drawable/chip_weekday_background"
+                android:layout_marginEnd="@dimen/size_6_dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_current_date_month">
+                <TextView
+                    android:id="@+id/tv_current_date_number"
+                    tools:text="26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/current_day_display_text_size"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/theme_red"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tv_current_date_month"
+                tools:text="January"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/current_day_display_text_size"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="?colorOnPrimary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -161,7 +201,6 @@
         android:id="@+id/cl_context_menu"
         android:layout_width="wrap_content"
         android:visibility="invisible"
-        tools:visibility="visible"
         android:layout_height="wrap_content"
         android:layout_marginEnd="72dp"
         app:layout_constraintTop_toTopOf="parent"

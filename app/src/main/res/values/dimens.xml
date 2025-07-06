@@ -34,4 +34,5 @@
     <dimen name="day_count_chip_text_size">10sp</dimen>
     <dimen name="placeholder_title_text_size">16sp</dimen>
     <dimen name="placeholder_description_text_size">12sp</dimen>
+    <dimen name="current_day_display_text_size">16sp</dimen>
 </resources>

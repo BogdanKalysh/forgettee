@@ -31,6 +31,9 @@ import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.ArchiveViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ArchiveActivity : AppCompatActivity() {
     private val viewModel: ArchiveViewModel by viewModel()
@@ -63,6 +66,7 @@ class ArchiveActivity : AppCompatActivity() {
         setupSearch()
         setupBackPressedObserver()
         setupDimmer()
+        setupCurrentDateDisplay()
     }
 
     private fun setupTodoArchiveRecyclerViewAdapter() {
@@ -111,18 +115,20 @@ class ArchiveActivity : AppCompatActivity() {
                 viewModel.archiveMode.collect { archiveMode ->
                     when (archiveMode) {
                         ArchiveActivityMode.SEARCH_MODE -> {
-                            binding.btnCloseSearch.visibility = View.VISIBLE
+                            binding.clCurrentDateContainer.visibility = View.GONE
                             binding.btnSearch.visibility = View.GONE
                             binding.tvActivityName.visibility = View.GONE
                             binding.btnBack.visibility = View.GONE
                             binding.etSearch.visibility = View.VISIBLE
+                            binding.btnCloseSearch.visibility = View.VISIBLE
                             focusOnEditText(binding.etSearch)
                         }
                         ArchiveActivityMode.FULL_ARCHIVE_MODE -> {
-                            binding.btnCloseSearch.visibility = View.GONE
+                            binding.clCurrentDateContainer.visibility = View.VISIBLE
                             binding.btnSearch.visibility = View.VISIBLE
                             binding.tvActivityName.visibility = View.VISIBLE
                             binding.btnBack.visibility = View.VISIBLE
+                            binding.btnCloseSearch.visibility = View.GONE
                             binding.etSearch.visibility = View.GONE
                             binding.etSearch.setText("")
                             hideKeyboard(binding.etSearch)
@@ -164,6 +170,15 @@ class ArchiveActivity : AppCompatActivity() {
 
     private fun setupDimmer() {
         binding.dimmer.setOnClickListener { closeAllPopups() }
+    }
+
+    private fun setupCurrentDateDisplay() {
+        val calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        val month = SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
+
+        binding.tvCurrentDateNumber.text = day
+        binding.tvCurrentDateMonth.text = month
     }
 
     private fun shouldDisplayWeekSeparator(): Boolean{
