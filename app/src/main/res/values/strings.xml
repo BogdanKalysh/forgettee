@@ -11,6 +11,8 @@
     <string name="save_button">Save</string>
     <string name="delete_all">Delete all</string>
     <string name="change_theme">Change theme</string>
+    <string name="return_item">Return</string>
+    <string name="delete_item">Delete</string>
     <string name="delete_archive_item_button">delete archive item</string>
 
     <!--  IU texts  -->

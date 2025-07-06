@@ -51,4 +51,14 @@ class ArchiveViewModel(private val repository: ToDoItemRepository): ViewModel() 
             repository.delete(item)
         }
     }
+
+    fun returnFromArchive(item: ToDoItem) {
+        // instantly deleting the item from the list of done tasks
+        _doneTasks.value = _doneTasks.value.filter { it.id != item.id }
+
+        val undoneToDo = item.copy(isDone = false, isRemoved = false)
+        viewModelScope.launch {
+            repository.update(undoneToDo)
+        }
+    }
 }

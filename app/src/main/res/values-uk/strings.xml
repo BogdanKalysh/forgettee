@@ -11,6 +11,8 @@
     <string name="save_button">Зберегти</string>
     <string name="delete_all">Видалити всі</string>
     <string name="change_theme">Змінити тему</string>
+    <string name="return_item">Повернути</string>
+    <string name="delete_item">Видалити</string>
     <string name="delete_archive_item_button">Видалити елемент архіву завдань</string>
 
     <!--  IU texts  -->

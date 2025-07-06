@@ -1,6 +1,7 @@
 package com.bkalysh.forgettee.utils
 
 import android.content.Context
+import android.content.res.Resources
 import android.content.res.Configuration
 import android.os.Build
 import android.os.VibrationEffect
@@ -76,6 +77,8 @@ object Utils {
         return (context.resources.configuration.uiMode and
                 Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     }
+
+    val Int.dp: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     const val SHARED_PREFERENCES_SETTINGS_NAME = "settings"
     const val SHARED_PREFERENCES_THEME_MODE_ITEM = "theme_mode"

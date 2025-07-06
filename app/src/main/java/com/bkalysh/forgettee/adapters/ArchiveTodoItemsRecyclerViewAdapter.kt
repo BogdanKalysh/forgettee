@@ -69,10 +69,10 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onTodoClickListener: OnTod
                 // Display completion time
                 tvCompletionTime.text = formatCompleteTime(toDoItem.doneAt)
                 // Setting up listener to open context menu for item
-                root.setOnClickListener { view ->
+                btnContextMenuItem.setOnClickListener { view ->
                     val location = IntArray(2)
                     view.getLocationOnScreen(location)
-                    onTodoClickListener.onTodoClicked(toDoItem, location[0].toFloat(), location[1].toFloat())
+                    onTodoClickListener.onTodoClicked(toDoItem, location[1].toFloat(), binding.btnContextMenuItem.height.toFloat())
                 }
             }
         }
@@ -110,7 +110,7 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onTodoClickListener: OnTod
     private val differ = AsyncListDiffer(this, diffCallback)
 
     interface OnTodoClickListener {
-        fun onTodoClicked(toDoItem: ToDoItem, x: Float, y: Float)
+        fun onTodoClicked(toDoItem: ToDoItem, y: Float, buttonHeight: Float)
     }
 
     sealed class UiItem {

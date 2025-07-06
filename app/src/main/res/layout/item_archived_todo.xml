@@ -32,9 +32,10 @@
         android:layout_height="@dimen/size_24_dp"
         android:background="@drawable/chip_days_background"
         android:paddingHorizontal="@dimen/size_8_dp"
+        android:layout_marginEnd="@dimen/size_8_dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/btn_context_menu_item">
         <TextView
             android:id="@+id/tv_completion_time"
             tools:text="00:00"
@@ -47,4 +48,16 @@
             android:minWidth="@dimen/time_chip_size"
             android:layout_gravity="center"/>
     </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/btn_context_menu_item"
+        android:layout_width="@dimen/size_32_dp"
+        android:layout_height="@dimen/size_32_dp"
+        android:src="@drawable/icn_dots"
+        app:tint="?attr/colorOnPrimary"
+        android:background="@drawable/image_button_ripple"
+        android:contentDescription="@string/delete_todo_item"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

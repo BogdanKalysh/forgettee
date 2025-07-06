@@ -316,7 +316,7 @@ class MainActivity : AppCompatActivity() {
     private fun closeAllPopups() {
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !isDarkTheme(this)
         binding.dimmer.visibility = View.INVISIBLE
-        val animation = AnimationUtils.loadAnimation(this, R.anim.close_scale_up)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.close_make_transparent)
         binding.clMenu.startAnimation(animation)
         binding.clMenu.visibility = View.INVISIBLE
     }

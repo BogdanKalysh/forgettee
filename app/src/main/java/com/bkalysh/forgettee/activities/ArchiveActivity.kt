@@ -1,13 +1,15 @@
 package com.bkalysh.forgettee.activities
 
-import android.graphics.Color
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
@@ -20,8 +22,10 @@ import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ActivityArchiveBinding
 import com.bkalysh.forgettee.utils.ArchiveActivityMode
 import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.generateUiItems
+import com.bkalysh.forgettee.utils.Utils.dp
 import com.bkalysh.forgettee.utils.Utils.focusOnEditText
 import com.bkalysh.forgettee.utils.Utils.hideKeyboard
+import com.bkalysh.forgettee.utils.Utils.isDarkTheme
 import com.bkalysh.forgettee.utils.Utils.setFirstLetterRed
 import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.ArchiveViewModel
@@ -41,7 +45,13 @@ class ArchiveActivity : AppCompatActivity() {
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            // applying insets via custom spacers, so the dimmer can cover the whole screen
+            val topLP = binding.flTopSpacer.layoutParams
+            topLP.height = systemBars.top
+            binding.flTopSpacer.layoutParams = topLP
+            val bottomLP = binding.flBottomSpacer.layoutParams
+            bottomLP.height = systemBars.bottom
+            binding.flBottomSpacer.layoutParams = bottomLP
             insets
         }
         setFirstLetterRed(binding.tvActivityName)
@@ -52,14 +62,14 @@ class ArchiveActivity : AppCompatActivity() {
         setupArchiveModeObserver()
         setupSearch()
         setupBackPressedObserver()
+        setupDimmer()
     }
 
     private fun setupTodoArchiveRecyclerViewAdapter() {
         toDoArchiveItemsAdapter = ArchiveTodoItemsRecyclerViewAdapter(
             object : ArchiveTodoItemsRecyclerViewAdapter.OnTodoClickListener {
-                override fun onTodoClicked(toDoItem: ToDoItem, x: Float, y: Float) {
-                    vibrate(this@ArchiveActivity)
-                    showTodoItemContextMenu(toDoItem, x, y)
+                override fun onTodoClicked(toDoItem: ToDoItem, y: Float, buttonHeight: Float) {
+                    showTodoItemContextMenu(toDoItem, y, buttonHeight)
                 }
             }
         )
@@ -152,22 +162,57 @@ class ArchiveActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupDimmer() {
+        binding.dimmer.setOnClickListener { closeAllPopups() }
+    }
+
     private fun shouldDisplayWeekSeparator(): Boolean{
         return viewModel.archiveMode.value == ArchiveActivityMode.FULL_ARCHIVE_MODE ||
                 viewModel.archiveSearchFilter.value.trim().isEmpty()
     }
 
+    private fun showTodoItemContextMenu(toDoItem: ToDoItem, yCord: Float, buttonHeight: Float) {
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
 
-    private fun showTodoItemContextMenu(toDoItem: ToDoItem, xCord: Float, yCord: Float) {
-        val blackOverlay = View(this).apply { // TMP just for visualization
-            setBackgroundColor(Color.BLACK)
-            alpha = 0.5f
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
+        // calculating display coordinates
+        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+        val bottomSpacerHeight = binding.flBottomSpacer.height.toFloat()
+        val contextMenuHeight = binding.clContextMenu.height
+
+        var displayYCord = yCord - (contextMenuHeight / 2) + (buttonHeight / 2)
+
+        if (displayYCord + contextMenuHeight > screenHeight - bottomSpacerHeight) {
+            displayYCord = screenHeight - contextMenuHeight - bottomSpacerHeight - 8.dp
         }
+        binding.clContextMenu.translationY = displayYCord
 
-        (findViewById<ViewGroup>(android.R.id.content)).addView(blackOverlay)
+        // enabling the views
+        binding.dimmer.visibility = View.VISIBLE
+        val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_left)
+        binding.clContextMenu.startAnimation(animation)
+        binding.clContextMenu.visibility = View.VISIBLE
+
+        //setting up the buttons
+        binding.btnReturnItem.setOnClickListener {
+            vibrate(this@ArchiveActivity)
+            binding.btnDeleteItem.isEnabled = false
+            closeAllPopups()
+            viewModel.returnFromArchive(toDoItem)
+        }
+        binding.btnDeleteItem.setOnClickListener {
+            vibrate(this@ArchiveActivity)
+            binding.btnReturnItem.isEnabled = false
+            closeAllPopups()
+            viewModel.deleteTodoItem(toDoItem)
+            Toast.makeText(this, getString(R.string.deleted_toast_text, toDoItem.text), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun closeAllPopups() {
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !isDarkTheme(this)
+        binding.dimmer.visibility = View.INVISIBLE
+        val animation = AnimationUtils.loadAnimation(this, R.anim.close_make_transparent)
+        binding.clContextMenu.startAnimation(animation)
+        binding.clContextMenu.visibility = View.INVISIBLE
     }
 }
