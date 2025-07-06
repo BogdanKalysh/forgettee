@@ -28,6 +28,14 @@
     <string name="deleted_toast_text">Deleted: %1$s</string>
     <string name="week_range" translatable="false">%1$s – %2$s%3$s</string>
 
+    <!--  settings texts  -->
+    <string name="app_theme">App theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system">System</string>
+    <string name="task_settings">Task settings</string>
+    <string name="add_to_the_end_description">Add new tasks to the end of the list</string>
+    <string name="use_24_format_description">Use 24-hour time format</string>
 
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">What will you do?</string>

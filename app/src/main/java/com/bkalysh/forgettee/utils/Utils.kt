@@ -82,5 +82,7 @@ object Utils {
 
     const val SHARED_PREFERENCES_SETTINGS_NAME = "settings"
     const val SHARED_PREFERENCES_THEME_MODE_ITEM = "theme_mode"
+    const val SHARED_PREFERENCES_24_HOUR_FORMAT_ITEM = "hour_24_format"
+    const val SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM = "new_tasks_add_to_end"
     const val SHARED_PREFERENCES_DB_PREPOPULATED_ITEM = "db_prepopulated"
 }

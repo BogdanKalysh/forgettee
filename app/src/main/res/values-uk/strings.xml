@@ -27,6 +27,15 @@
     <string name="placeholder_search_archive_description">За твоїм запитом немає\nзавершених завдань</string>
     <string name="deleted_toast_text">Видалено: %1$s</string>
 
+    <!--  settings texts  -->
+    <string name="app_theme">Тема застосунку</string>
+    <string name="light">Світла</string>
+    <string name="dark">Темна</string>
+    <string name="system">Системна</string>
+    <string name="task_settings">Налаштування завдань</string>
+    <string name="add_to_the_end_description">Додавати нові завдання в кінець списку</string>
+    <string name="use_24_format_description">Використовувати 24-годинний формат</string>
+
     <!--  Placeholders for textview  -->
     <string name="what_will_you_do">Що зробиш?</string>
     <string name="search">Пошук</string>

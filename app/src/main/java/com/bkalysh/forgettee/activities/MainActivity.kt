@@ -41,6 +41,7 @@ import java.util.Date
 import androidx.core.content.edit
 import androidx.core.view.WindowCompat
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_DB_PREPOPULATED_ITEM
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_SETTINGS_NAME
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_THEME_MODE_ITEM
 import com.bkalysh.forgettee.utils.Utils.isDarkTheme
@@ -122,9 +123,13 @@ class MainActivity : AppCompatActivity() {
                     viewModel.updateAllTodoItems(reorderedItems)
                 }
             },
-            object : TodoItemsRecyclerViewAdapter.OnNewItemAddedToTopListener {
+            object : TodoItemsRecyclerViewAdapter.OnItemAddListener {
                 override fun onTopItemAdded() {
                     binding.rvTodoList.scrollToPosition(0)
+                }
+
+                override fun onBottomItemAdded(lastIndex: Int) {
+                    binding.rvTodoList.scrollToPosition(lastIndex)
                 }
             })
 
@@ -225,10 +230,18 @@ class MainActivity : AppCompatActivity() {
             val todoText = todoPopupBinding.etTodoText.text.toString().trim()
 
             if (todoText.isNotEmpty()) {
-                val newTodoItem = parseTodoItemFromInput(todoText, 0)
-                val updatedItems = increaseTodoItemsPositions(viewModel.activeTasks.value)
-                updatedItems.forEach(viewModel::updateTodoItem) // updating positions to free the 0 position for the new item
-                viewModel.insertTodoItem(newTodoItem)
+                val isAddingToEnd = sharedPref.getBoolean(
+                    SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM, false)
+
+                if (isAddingToEnd) {
+                    val newTodoItem = parseTodoItemFromInput(todoText, viewModel.activeTasks.value.last().position + 1)
+                    viewModel.insertTodoItem(newTodoItem)
+                } else {
+                    val newTodoItem = parseTodoItemFromInput(todoText, 0)
+                    val updatedItems = increaseTodoItemsPositions(viewModel.activeTasks.value)
+                    updatedItems.forEach(viewModel::updateTodoItem) // updating positions to free the 0 position for the new item
+                    viewModel.insertTodoItem(newTodoItem)
+                }
                 todoPopup.dismiss()
             } else {
                 if (todoPopupBinding.textviewEmptyWarning.isGone) {
@@ -274,17 +287,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(settingsIntent)
             closeAllPopups()
         }
-
-//        binding.tvChangeTheme.setOnClickListener {
-//            val newThemeMode =
-//                if (isDarkTheme(this)) {
-//                    AppCompatDelegate.MODE_NIGHT_NO
-//                } else {
-//                    AppCompatDelegate.MODE_NIGHT_YES
-//                }
-//            AppCompatDelegate.setDefaultNightMode(newThemeMode)
-//            sharedPref.edit { putInt(SHARED_PREFERENCES_THEME_MODE_ITEM, newThemeMode) }
-//        }
     }
 
     private fun setupAppTheme() {

@@ -5,6 +5,7 @@ import com.bkalysh.forgettee.database.ForgetteeDatabase
 import com.bkalysh.forgettee.database.repository.ToDoItemRepository
 import com.bkalysh.forgettee.viewmodel.ArchiveViewModel
 import com.bkalysh.forgettee.viewmodel.MainViewModel
+import com.bkalysh.forgettee.viewmodel.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -19,4 +20,5 @@ val appModule = module {
 
     viewModel { MainViewModel(get()) }
     viewModel { ArchiveViewModel(get()) }
+    viewModel { SettingsViewModel() }
 }

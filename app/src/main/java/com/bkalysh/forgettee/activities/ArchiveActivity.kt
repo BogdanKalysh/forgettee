@@ -1,5 +1,6 @@
 package com.bkalysh.forgettee.activities
 
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -36,12 +37,16 @@ import java.util.Calendar
 import java.util.Locale
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_24_HOUR_FORMAT_ITEM
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_SETTINGS_NAME
 
 class ArchiveActivity : AppCompatActivity() {
     private val viewModel: ArchiveViewModel by viewModel()
 
     private lateinit var binding: ActivityArchiveBinding
     private lateinit var toDoArchiveItemsAdapter: ArchiveTodoItemsRecyclerViewAdapter
+
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +64,7 @@ class ArchiveActivity : AppCompatActivity() {
             binding.flBottomSpacer.layoutParams = bottomLP
             insets
         }
+        sharedPref = getSharedPreferences(SHARED_PREFERENCES_SETTINGS_NAME, MODE_PRIVATE)
         setFirstLetterRed(binding.tvActivityName)
 
         setupArchiveItemsObserving()
@@ -77,7 +83,8 @@ class ArchiveActivity : AppCompatActivity() {
                 override fun onTodoClicked(toDoItem: ToDoItem, y: Float, buttonHeight: Float) {
                     showTodoItemContextMenu(toDoItem, y, buttonHeight)
                 }
-            }
+            },
+            sharedPref.getBoolean(SHARED_PREFERENCES_24_HOUR_FORMAT_ITEM, true)
         )
         binding.rvTodoArchiveList.apply {
             adapter = toDoArchiveItemsAdapter

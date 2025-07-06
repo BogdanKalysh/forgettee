@@ -11,7 +11,10 @@ import com.bkalysh.forgettee.databinding.ItemArchiveWeekSeparatorBinding
 import com.bkalysh.forgettee.databinding.ItemArchivedTodoBinding
 import com.bkalysh.forgettee.utils.ArchiveTodoAdapterUtils.formatCompleteTime
 
-class ArchiveTodoItemsRecyclerViewAdapter(private val onTodoClickListener: OnTodoClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArchiveTodoItemsRecyclerViewAdapter(
+    private val onTodoClickListener: OnTodoClickListener,
+    private val use24HourFormat: Boolean
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var archiveItems: List<UiItem>
         get() = differ.currentList
         set(value) { differ.submitList(value) }
@@ -67,7 +70,7 @@ class ArchiveTodoItemsRecyclerViewAdapter(private val onTodoClickListener: OnTod
                 // Display task text
                 tvTaskText.text = toDoItem.text
                 // Display completion time
-                tvCompletionTime.text = formatCompleteTime(toDoItem.doneAt)
+                tvCompletionTime.text = formatCompleteTime(toDoItem.doneAt, use24HourFormat)
                 // Setting up listener to open context menu for item
                 btnContextMenuItem.setOnClickListener { view ->
                     val location = IntArray(2)

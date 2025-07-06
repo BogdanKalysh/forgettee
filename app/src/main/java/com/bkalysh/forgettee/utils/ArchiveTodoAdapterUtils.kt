@@ -37,8 +37,9 @@ object ArchiveTodoAdapterUtils {
         return uiItems
     }
 
-    fun formatCompleteTime(dateCompleted: Date): String {
-        val format = SimpleDateFormat("HH:mm", Locale.getDefault())
+    fun formatCompleteTime(dateCompleted: Date, use24HourFormat: Boolean): String {
+        val pattern = if (use24HourFormat) "HH:mm" else "hh:mm a"
+        val format = SimpleDateFormat(pattern, Locale.getDefault())
         return format.format(dateCompleted)
     }
 
