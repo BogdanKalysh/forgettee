@@ -28,7 +28,6 @@ import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ActivityMainBinding
 import com.bkalysh.forgettee.utils.Utils.focusOnEditText
 import com.bkalysh.forgettee.utils.Utils.parseTodoItemFromInput
-import com.bkalysh.forgettee.utils.Utils.increaseTodoItemsPositions
 import com.bkalysh.forgettee.utils.Utils.vibrate
 import com.bkalysh.forgettee.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
@@ -228,20 +227,11 @@ class MainActivity : AppCompatActivity() {
         todoPopupBinding.btnAddOrSaveTodo.setOnClickListener {
             vibrate(this@MainActivity)
             val todoText = todoPopupBinding.etTodoText.text.toString().trim()
+            val isAddingToEnd = sharedPref.getBoolean(
+                SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM, false)
 
             if (todoText.isNotEmpty()) {
-                val isAddingToEnd = sharedPref.getBoolean(
-                    SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM, false)
-
-                if (isAddingToEnd) {
-                    val newTodoItem = parseTodoItemFromInput(todoText, viewModel.activeTasks.value.last().position + 1)
-                    viewModel.insertTodoItem(newTodoItem)
-                } else {
-                    val newTodoItem = parseTodoItemFromInput(todoText, 0)
-                    val updatedItems = increaseTodoItemsPositions(viewModel.activeTasks.value)
-                    updatedItems.forEach(viewModel::updateTodoItem) // updating positions to free the 0 position for the new item
-                    viewModel.insertTodoItem(newTodoItem)
-                }
+                viewModel.createNewTodoItem(todoText, isAddingToEnd)
                 todoPopup.dismiss()
             } else {
                 if (todoPopupBinding.textviewEmptyWarning.isGone) {

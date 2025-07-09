@@ -5,11 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.database.repository.ToDoItemRepository
 import com.bkalysh.forgettee.utils.ArchiveActivityMode
+import com.bkalysh.forgettee.utils.Utils.increaseTodoItemsPositions
+import com.bkalysh.forgettee.utils.Utils.parseTodoItemFromInput
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -59,6 +62,34 @@ class ArchiveViewModel(private val repository: ToDoItemRepository): ViewModel() 
         val undoneToDo = item.copy(isDone = false, isRemoved = false)
         viewModelScope.launch {
             repository.update(undoneToDo)
+        }
+    }
+
+    fun copyFromArchive(item: ToDoItem, addToEnd: Boolean) {
+        addNewTodoItem(item.text, addToEnd)
+    }
+
+    private fun updateTodoItem(item: ToDoItem) {
+        viewModelScope.launch {
+            repository.update(item)
+        }
+    }
+
+    private fun addNewTodoItem(todoText: String, addToEnd: Boolean) {
+        viewModelScope.launch {
+            if (todoText.isNotEmpty()) {
+                val currentItems = repository.getAllActive().first()
+
+                if (addToEnd) {
+                    val newItem = parseTodoItemFromInput(todoText, currentItems.lastOrNull()?.position?.plus(1) ?: 0)
+                    repository.insert(newItem)
+                } else {
+                    val newItem = parseTodoItemFromInput(todoText, 0)
+                    val updatedItems = increaseTodoItemsPositions(currentItems)
+                    updatedItems.forEach { updateTodoItem(it) }
+                    repository.insert(newItem)
+                }
+            }
         }
     }
 }

@@ -38,6 +38,7 @@ import java.util.Locale
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_24_HOUR_FORMAT_ITEM
+import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM
 import com.bkalysh.forgettee.utils.Utils.SHARED_PREFERENCES_SETTINGS_NAME
 
 class ArchiveActivity : AppCompatActivity() {
@@ -250,21 +251,37 @@ class ArchiveActivity : AppCompatActivity() {
         val animation = AnimationUtils.loadAnimation(this, R.anim.open_scale_left)
         binding.clContextMenu.startAnimation(animation)
         binding.clContextMenu.visibility = View.VISIBLE
+        enableContextMenuButtons()
 
         //setting up the buttons
         binding.btnReturnItem.setOnClickListener {
             vibrate(this@ArchiveActivity)
-            binding.btnDeleteItem.isEnabled = false
+            enableContextMenuButtons(false)
             closeAllPopups()
             viewModel.returnFromArchive(toDoItem)
         }
+        binding.btnCopyItem.setOnClickListener {
+            vibrate(this@ArchiveActivity)
+            enableContextMenuButtons(false)
+            val isAddingToEnd = sharedPref.getBoolean(
+                SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM, false)
+            closeAllPopups()
+            viewModel.copyFromArchive(toDoItem, isAddingToEnd)
+            Toast.makeText(this, getString(R.string.copied_toast_text, toDoItem.text), Toast.LENGTH_SHORT).show()
+        }
         binding.btnDeleteItem.setOnClickListener {
             vibrate(this@ArchiveActivity)
-            binding.btnReturnItem.isEnabled = false
+            enableContextMenuButtons(false)
             closeAllPopups()
             viewModel.deleteTodoItem(toDoItem)
             Toast.makeText(this, getString(R.string.deleted_toast_text, toDoItem.text), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun enableContextMenuButtons(isEnabled: Boolean = true) {
+        binding.btnReturnItem.isEnabled = isEnabled
+        binding.btnCopyItem.isEnabled = isEnabled
+        binding.btnDeleteItem.isEnabled = isEnabled
     }
 
     private fun closeAllPopups() {

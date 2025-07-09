@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.database.repository.ToDoItemRepository
+import com.bkalysh.forgettee.utils.Utils.increaseTodoItemsPositions
+import com.bkalysh.forgettee.utils.Utils.parseTodoItemFromInput
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +19,24 @@ class MainViewModel(private val repository: ToDoItemRepository): ViewModel() {
         viewModelScope.launch {
             repository.getAllActive().collect { tasks ->
                 _activeTasks.value = tasks
+            }
+        }
+    }
+
+    fun createNewTodoItem(todoText: String, addToEnd: Boolean) {
+        viewModelScope.launch {
+            if (todoText.isNotEmpty()) {
+                val currentItems = activeTasks.value
+
+                if (addToEnd) {
+                    val newItem = parseTodoItemFromInput(todoText, currentItems.lastOrNull()?.position?.plus(1) ?: 0)
+                    repository.insert(newItem)
+                } else {
+                    val newItem = parseTodoItemFromInput(todoText, 0)
+                    val updatedItems = increaseTodoItemsPositions(currentItems)
+                    updatedItems.forEach { updateTodoItem(it) }
+                    repository.insert(newItem)
+                }
             }
         }
     }
