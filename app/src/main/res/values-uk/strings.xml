@@ -12,7 +12,7 @@
     <string name="delete_all">Видалити всі</string>
     <string name="change_theme">Змінити тему</string>
     <string name="return_item">Повернути</string>
-    <string name="copy_item">Створити копію</string>
+    <string name="copy_item">Копіювати завдання</string>
     <string name="delete_item">Видалити</string>
     <string name="delete_archive_item_button">Видалити елемент архіву завдань</string>
 
@@ -27,7 +27,7 @@
     <string name="placeholder_archive_description">Немає завершених\nзавдань в архіві</string>
     <string name="placeholder_search_archive_description">За твоїм запитом немає\nзавершених завдань</string>
     <string name="deleted_toast_text">Видалено: %1$s</string>
-    <string name="copied_toast_text">Створено копію: %1$s</string>
+    <string name="copied_toast_text">Створено активне завдання: %1$s</string>
 
     <!--  settings texts  -->
     <string name="app_theme">Тема застосунку</string>

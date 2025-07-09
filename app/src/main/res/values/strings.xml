@@ -12,7 +12,7 @@
     <string name="delete_all">Delete all</string>
     <string name="change_theme">Change theme</string>
     <string name="return_item">Return</string>
-    <string name="copy_item">Create copy</string>
+    <string name="copy_item">Copy task</string>
     <string name="delete_item">Delete</string>
     <string name="delete_archive_item_button">delete archive item</string>
 
@@ -27,7 +27,7 @@
     <string name="placeholder_archive_description">There are no completed\ntasks in archive</string>
     <string name="placeholder_search_archive_description">There are no completed\ntasks for your request</string>
     <string name="deleted_toast_text">Deleted: %1$s</string>
-    <string name="copied_toast_text">Created copy: %1$s</string>
+    <string name="copied_toast_text">Created active task: %1$s</string>
     <string name="week_range" translatable="false">%1$s – %2$s%3$s</string>
 
     <!--  settings texts  -->
