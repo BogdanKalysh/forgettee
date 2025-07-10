@@ -22,10 +22,10 @@
     <string name="archive">Архів</string>
     <string name="settings">Налаштування</string>
     <string name="no_tasks">Немає завдань</string>
-    <string name="placeholder_main_description">Натисни кнопку + щоб\nдодати завдання</string>
+    <string name="placeholder_main_description">Натисніть кнопку + щоб\nдодати завдання</string>
     <string name="empty">Пусто</string>
     <string name="placeholder_archive_description">Немає завершених\nзавдань в архіві</string>
-    <string name="placeholder_search_archive_description">За твоїм запитом немає\nзавершених завдань</string>
+    <string name="placeholder_search_archive_description">За вашим запитом немає\nзавершених завдань</string>
     <string name="deleted_toast_text">Видалено: %1$s</string>
     <string name="copied_toast_text">Створено активне завдання: %1$s</string>
 
@@ -35,19 +35,20 @@
     <string name="dark">Темна</string>
     <string name="system">Системна</string>
     <string name="task_settings">Налаштування завдань</string>
+    <string name="archive_settings">Налаштування архіву</string>
     <string name="add_to_the_end_description">Додавати нові завдання в кінець списку</string>
     <string name="use_24_format_description">Використовувати 24-годинний формат</string>
 
     <!--  Placeholders for textview  -->
-    <string name="what_will_you_do">Що зробиш?</string>
+    <string name="what_will_you_do">Опис завдання</string>
     <string name="search">Пошук</string>
 
     <!--  Toast messages  -->
-    <string name="enter_todo_task_description">*Введи опис завдання</string>
+    <string name="enter_todo_task_description">*Введіть опис завдання</string>
 
     <!--  Tutorial tasks  -->
     <string name="tutorial_task_finish">1. Натисни мене, щоб виконати завдання</string>
     <string name="tutorial_task_edit">2. Свайпни мене ліворуч, щоб редагувати завдання</string>
     <string name="tutorial_task_delete">3. Свайпни мене праворуч, щоб завершити завдання</string>
-    <string name="tutorial_task_reorder">4. Натисни і тримай мене, щоб перемістити</string>
+    <string name="tutorial_task_reorder">4. Натисни і тримай мене, щоб перемістити завдання</string>
 </resources>

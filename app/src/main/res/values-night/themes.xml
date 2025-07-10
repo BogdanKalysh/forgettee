@@ -12,7 +12,8 @@
         <item name="colorSecondaryVariant">@color/night_30</item>
         <item name="colorOnSecondaryFixedVariant">@color/night_39</item>
 
-        <item name="colorSurface">@color/white_semi_transparent_10</item>
+        <item name="colorOnTertiary">@color/white_semi_transparent_10</item>
+
 
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>

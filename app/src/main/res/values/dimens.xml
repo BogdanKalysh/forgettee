@@ -15,6 +15,7 @@
 
     <!--  custom sizes  -->
     <dimen name="time_chip_size">30dp</dimen>
+    <dimen name="date_circle_size">26dp</dimen>
 
     <!--  corners  -->
     <dimen name="item_corner_radius">16dp</dimen>

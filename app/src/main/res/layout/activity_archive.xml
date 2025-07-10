@@ -93,10 +93,12 @@
             app:layout_constraintBottom_toBottomOf="parent">
             <FrameLayout
                 android:id="@+id/container_current_date_number"
-                android:layout_width="@dimen/size_24_dp"
-                android:layout_height="@dimen/size_24_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/chip_gray_background"
                 android:layout_marginEnd="@dimen/size_6_dp"
+                android:minHeight="@dimen/date_circle_size"
+                android:minWidth="@dimen/date_circle_size"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_current_date_month">

@@ -36,11 +36,12 @@
     <string name="dark">Dark</string>
     <string name="system">System</string>
     <string name="task_settings">Task settings</string>
+    <string name="archive_settings">Archive settings</string>
     <string name="add_to_the_end_description">Add new tasks to the end of the list</string>
     <string name="use_24_format_description">Use 24-hour time format</string>
 
     <!--  Placeholders for textview  -->
-    <string name="what_will_you_do">What will you do?</string>
+    <string name="what_will_you_do">Task description</string>
     <string name="search">Search</string>
 
     <!--  Toast messages  -->
@@ -50,5 +51,5 @@
     <string name="tutorial_task_finish">1. Click me to mark the task done</string>
     <string name="tutorial_task_edit">2. Swipe me left to edit the task</string>
     <string name="tutorial_task_delete">3. Swipe me right to complete the task</string>
-    <string name="tutorial_task_reorder">4. Click and hold me to reorder</string>
+    <string name="tutorial_task_reorder">4. Click and hold me to move task</string>
 </resources>

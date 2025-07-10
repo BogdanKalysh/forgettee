@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bkalysh.forgettee.R
 import com.bkalysh.forgettee.database.models.ToDoItem
 import com.bkalysh.forgettee.databinding.ItemTodoBinding
-import com.bkalysh.forgettee.utils.Utils.isDarkTheme
 
 
 class TodoItemsRecyclerViewAdapter(
@@ -61,25 +60,12 @@ class TodoItemsRecyclerViewAdapter(
             if (toDoItem.isDone) {
                 tvTodoText.paintFlags = tvTodoText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 root.setBackgroundResource(R.drawable.todo_item_done_background)
-                val textColor = if (isDarkTheme(root.context)) {
-                    // In future will change to dark theme color
-                    ContextCompat.getColor(root.context, R.color.night_39)
-                } else {
-                    ContextCompat.getColor(root.context, R.color.gray_50)
-                }
-                tvTodoText.setTextColor(textColor)
+                tvTodoText.setTextColor(ContextCompat.getColor(root.context, R.color.on_secondary_variant_color))
             } else {
                 tvTodoText.paintFlags = tvTodoText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 root.setBackgroundResource(R.drawable.todo_item_background)
-                val textColor = if (isDarkTheme(root.context)) {
-                    // In future will change to dark theme color
-                    ContextCompat.getColor(root.context, R.color.bright_91)
-                } else {
-                    ContextCompat.getColor(root.context, R.color.dark_27)
-                }
-                tvTodoText.setTextColor(textColor)
+                tvTodoText.setTextColor(ContextCompat.getColor(root.context, R.color.on_primary_color))
             }
-
 
             root.setOnClickListener {
                 toggleListener.onTodoClicked(toDoItem)
