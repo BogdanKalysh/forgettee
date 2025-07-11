@@ -22,6 +22,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_week_separator_text" />
+        <FrameLayout
+            android:id="@+id/line_week_separator_left_bottom"
+            android:layout_width="1dp"
+            android:layout_height="5dp"
+            android:background="?attr/colorOnPrimary"
+            app:layout_constraintTop_toTopOf="@id/line_week_separator_left"
+            app:layout_constraintStart_toStartOf="@id/line_week_separator_left" />
+
         <TextView
             android:id="@+id/tv_week_separator_text"
             tools:text="26 Jan - 20 Jan"
@@ -34,6 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
         <FrameLayout
             android:id="@+id/line_week_separator_right"
             android:layout_width="0dp"
@@ -44,5 +53,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_week_separator_text"
             app:layout_constraintEnd_toEndOf="parent" />
+        <FrameLayout
+            android:id="@+id/line_week_separator_right_bottom"
+            android:layout_width="1dp"
+            android:layout_height="5dp"
+            android:background="?attr/colorOnPrimary"
+            app:layout_constraintTop_toTopOf="@id/line_week_separator_left"
+            app:layout_constraintEnd_toEndOf="@id/line_week_separator_right" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
