@@ -169,6 +169,11 @@ class TodoItemTouchHelperCallback(
             )
         }
 
+        // handling quick return to 0 while animation still in progress
+        if (swipeProgress == 0f) {
+            circleState.reset()
+        }
+
         // handling clearing swipe wave after removing
         if (swipeProgress <= 0.5f && circleState.removed) {
             circleState.reset()
