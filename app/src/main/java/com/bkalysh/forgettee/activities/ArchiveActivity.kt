@@ -132,12 +132,6 @@ class ArchiveActivity : AppCompatActivity() {
                     toDoArchiveItemsAdapter.archiveItems = generateUiItems(todoItems,
                         shouldDisplayWeekSeparator(), this@ArchiveActivity)
 
-                    if (viewModel.archiveMode.value == ArchiveActivityMode.FULL_ARCHIVE_MODE) {
-                        binding.tvPlaceholderDescription.setText(R.string.placeholder_archive_description)
-                    } else {
-                        binding.tvPlaceholderDescription.setText(R.string.placeholder_search_archive_description)
-                    }
-
                     binding.containerEmptyListPlaceholder.visibility =
                         if (todoItems.isEmpty()) { View.VISIBLE } else { View.GONE }
                 }
@@ -164,6 +158,7 @@ class ArchiveActivity : AppCompatActivity() {
                             binding.etSearch.visibility = View.VISIBLE
                             binding.btnCloseSearch.visibility = View.VISIBLE
                             focusOnEditText(binding.etSearch)
+                            binding.tvPlaceholderDescription.setText(R.string.placeholder_search_archive_description)
                         }
                         ArchiveActivityMode.FULL_ARCHIVE_MODE -> {
                             binding.clCurrentDateContainer.visibility = View.VISIBLE
@@ -174,6 +169,7 @@ class ArchiveActivity : AppCompatActivity() {
                             binding.etSearch.visibility = View.GONE
                             binding.etSearch.setText("")
                             hideKeyboard(binding.etSearch)
+                            binding.tvPlaceholderDescription.setText(R.string.placeholder_archive_description)
                         }
                     }
                 }
