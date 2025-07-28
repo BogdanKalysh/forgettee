@@ -28,3 +28,4 @@ Forgettee is built using native Android development tools and libraries:
 <img width="200" alt="tg_image_480004155" src="https://github.com/user-attachments/assets/fe441383-3409-4d5f-b654-7809611ebc64" /> 
 <img width="200" alt="tg_image_3243612921" src="https://github.com/user-attachments/assets/f64e782d-00bd-427e-a587-c69640858c26" />
 <img width="200" alt="tg_image_3742897344" src="https://github.com/user-attachments/assets/e47e15a2-7978-4b2c-9699-05e9c9dc7c97" />
+<img width="200" alt="tg_image_2517061509" src="https://github.com/user-attachments/assets/5a68df1b-3e83-4fc5-8e5e-54e789eb9059" />
