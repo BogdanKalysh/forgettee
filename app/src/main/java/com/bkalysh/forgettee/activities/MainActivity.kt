@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             // applying insets via custom spacers, so the dimmer can cover the whole screen
@@ -72,8 +73,15 @@ class MainActivity : AppCompatActivity() {
             val bottomLP = binding.flBottomSpacer.layoutParams
             bottomLP.height = systemBars.bottom
             binding.flBottomSpacer.layoutParams = bottomLP
+            val leftLP = binding.flLeftSpacer.layoutParams
+            leftLP.width = systemBars.left
+            binding.flLeftSpacer.layoutParams = leftLP
+            val rightLP = binding.flRightSpacer.layoutParams
+            rightLP.width = systemBars.right
+            binding.flRightSpacer.layoutParams = rightLP
             insets
         }
+
         sharedPref = getSharedPreferences(SHARED_PREFERENCES_SETTINGS_NAME, MODE_PRIVATE)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

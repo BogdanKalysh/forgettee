@@ -7,6 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
+
+    <!--  Spacers  -->
     <FrameLayout
         android:id="@+id/fl_top_spacer"
         android:layout_width="match_parent"
@@ -17,14 +19,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <FrameLayout
+        android:id="@+id/fl_left_spacer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <FrameLayout
+        android:id="@+id/fl_right_spacer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <!--  Spacers  -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/size_64_dp"
         android:paddingHorizontal="@dimen/size_24_dp"
-
-        app:layout_constraintTop_toBottomOf="@id/fl_top_spacer">
+        app:layout_constraintTop_toBottomOf="@id/fl_top_spacer"
+        app:layout_constraintStart_toEndOf="@id/fl_left_spacer"
+        app:layout_constraintEnd_toStartOf="@id/fl_right_spacer">
 
         <TextView
             android:id="@+id/tv_app_name"
@@ -54,11 +68,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_todo_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
 
         app:layout_constraintTop_toBottomOf="@id/cl_toolbar"
-        app:layout_constraintBottom_toTopOf="@id/fl_bottom_spacer"/>
+        app:layout_constraintBottom_toTopOf="@id/fl_bottom_spacer"
+        app:layout_constraintStart_toEndOf="@id/fl_left_spacer"
+        app:layout_constraintEnd_toStartOf="@id/fl_right_spacer"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_empty_list_placeholder"
@@ -112,7 +128,7 @@
         android:layout_margin="@dimen/size_24_dp"
 
         app:layout_constraintBottom_toTopOf="@id/fl_bottom_spacer"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@id/fl_right_spacer"/>
 
     <FrameLayout
         android:id="@+id/dimmer"
@@ -130,7 +146,7 @@
         tools:visibility="visible"
         android:layout_marginEnd="@dimen/size_24_dp"
         app:layout_constraintTop_toBottomOf="@id/cl_toolbar"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/fl_right_spacer">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_archive"
