@@ -49,7 +49,6 @@ object Utils {
                 .map { item -> item.copy(position = item.position + 1) }
     }
 
-
     fun vibrate(context: Context) {
         val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vm = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -58,7 +57,17 @@ object Utils {
             @Suppress("DEPRECATION")
             context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
-        vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val support = vibrator.areAllEffectsSupported(VibrationEffect.EFFECT_CLICK)
+            if (support == Vibrator.VIBRATION_EFFECT_SUPPORT_YES) {
+                vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+            } else {
+                vibrator.vibrate(VibrationEffect.createOneShot(VIBRATION_TIME, VibrationEffect.DEFAULT_AMPLITUDE))
+            }
+        } else {
+            vibrator.vibrate(VibrationEffect.createOneShot(VIBRATION_TIME, VibrationEffect.DEFAULT_AMPLITUDE))
+        }
     }
 
     fun setFirstLetterRed(textView: TextView) {
@@ -85,4 +94,6 @@ object Utils {
     const val SHARED_PREFERENCES_24_HOUR_FORMAT_ITEM = "hour_24_format"
     const val SHARED_PREFERENCES_NEW_TASKS_ADD_TO_END_ITEM = "new_tasks_add_to_end"
     const val SHARED_PREFERENCES_DB_PREPOPULATED_ITEM = "db_prepopulated"
+
+    private const val VIBRATION_TIME = 100L
 }
