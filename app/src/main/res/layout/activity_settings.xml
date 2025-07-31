@@ -21,7 +21,7 @@
             android:layout_height="@dimen/size_48_dp"
             android:src="@drawable/icn_back_arrow"
             android:background="@drawable/image_button_ripple"
-            android:contentDescription="@string/menu"
+            android:contentDescription="@string/back"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -3,6 +3,7 @@
 
     <!--  context descriptions  -->
     <string name="menu">Menu</string>
+    <string name="back">Back</string>
     <string name="add_todo_item">Add todo item</string>
     <string name="delete_todo_item">Delete todo item</string>
 
